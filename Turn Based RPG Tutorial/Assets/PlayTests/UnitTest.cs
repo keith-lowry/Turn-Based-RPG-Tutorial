@@ -6,20 +6,71 @@ using UnityEngine.TestTools;
 
 public class UnitTest
 {
-    // A Test behaves as an ordinary method
-    [Test]
-    public void UnitTestSimplePasses()
+    private GameObject playerPrefab;
+    private Unit unit;
+
+    /**
+     * Sets up the testing environment before
+     * each test method is called.
+     */
+    [SetUp]
+    public void SetUp()
     {
-        // Use the Assert class to test conditions
+        playerPrefab = Object.Instantiate
+            (Resources.Load<GameObject>("Prefabs/Player"));
+        unit = playerPrefab.GetComponent<Unit>();
     }
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator UnitTestWithEnumeratorPasses()
+    /**
+     * Resets the testing environement after
+     * each test method is called.
+     */
+    [TearDown]
+    public void TearDown()
     {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
+        MonoBehaviour.Destroy(playerPrefab);
     }
+
+    /**
+     * Check that fields are initialized properly
+     * within the prefab.
+     */
+    [Test]
+    public void TestUnitFields()
+    {
+        Assert.AreEqual(unit.maxHP, 100);
+        Assert.AreEqual(unit.currentHP, unit.maxHP);
+        Assert.AreEqual(unit.damage, 10);
+        Assert.AreEqual(unit.damage, 10);
+    }
+
+    /**
+     * Test that Unit script's TakeDamage() method
+     * properly updates currentHP.
+     */
+    [Test]
+    public void TestUnitTakeDamage()
+    {
+        Assert.AreEqual(unit.currentHP, 100);
+
+        unit.TakeDamage(10); 
+        Assert.AreEqual(unit.currentHP, 90); //unit took 10 damage
+    }
+
+    /**
+     * Test that the Unit script's TakeDamage() method returns
+     * false when unit does not die and true when
+     * unit does die.
+     */
+    [Test]
+    public void TestUnitDie()
+    {
+        Assert.AreEqual(unit.currentHP, 100);
+
+        Assert.IsFalse(unit.TakeDamage(10)); //unit does not die
+        Assert.IsTrue(unit.TakeDamage(100)); //unit dies
+        Assert.IsTrue(unit.currentHP <= 0);
+    }
+
+
 }
