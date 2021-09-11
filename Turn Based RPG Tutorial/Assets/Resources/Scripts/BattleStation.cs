@@ -10,6 +10,7 @@ public class BattleStation : MonoBehaviour
     {
         sp = GetComponent<SpriteRenderer>();
         sp.enabled = false;
+        
     }
 
     /**

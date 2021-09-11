@@ -38,8 +38,8 @@ public class UnitTest
     [Test]
     public void TestUnitFields()
     {
-        Assert.AreEqual(unit.maxHP, 100);
-        Assert.AreEqual(unit.CurrentHP, unit.maxHP);
+        Assert.AreEqual(unit.stats.vitality, 100);
+        Assert.AreEqual(unit.CurrentHP, unit.stats.vitality);
         Assert.AreEqual(unit.damage, 10);
         Assert.AreEqual(unit.damage, 10);
     }

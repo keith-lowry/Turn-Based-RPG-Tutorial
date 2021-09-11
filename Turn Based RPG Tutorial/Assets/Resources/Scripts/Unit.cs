@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 /**
@@ -24,11 +26,10 @@ public class Unit : MonoBehaviour
      */
     public int damage;
 
-    /**
-     * Maximum amount of HP the Unit
-     * can have.
-     */
-    public int maxHP;
+    /// <summary>
+    /// The Unit's current HP.
+    /// </summary>
+    private int currentHP;
 
     /// <summary>
     /// The Unit's current HP.
@@ -38,14 +39,17 @@ public class Unit : MonoBehaviour
         get { return currentHP; }
     }
 
-    /// <summary>
-    /// The Unit's current HP.
-    /// </summary>
-    private int currentHP;
+    public UnitStats baseStats;
+
+    public UnitStats stats;
+    
 
     public void Awake()
     {
-        currentHP = maxHP;
+        stats = new UnitStats(baseStats.vitality, baseStats.resource, 
+            baseStats.intelligence, baseStats.strength, 
+            baseStats.magicResist, baseStats.armor, baseStats.speed);
+        currentHP = stats.vitality;
     }
 
     /**
@@ -64,5 +68,31 @@ public class Unit : MonoBehaviour
         }
 
         return false;
+    }
+
+    /**
+     * Struct holding the Unit's stats.
+     */
+    [System.Serializable]
+    public class UnitStats
+    {
+        public int vitality;
+        public int resource;
+        public int intelligence;
+        public int strength;
+        public int magicResist;
+        public int armor;
+        public int speed;
+
+        public UnitStats(int v, int r, int i, int s, int mr, int a, int sp)
+        {
+            vitality = v;
+            resource = r;
+            intelligence = i;
+            strength = s;
+            magicResist = mr;
+            armor = a;
+            speed = sp;
+        }
     }
 }
