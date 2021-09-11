@@ -20,11 +20,7 @@ public class Unit : MonoBehaviour
      */
     public int unitLevel;
 
-    /**
-     * Amount of damage the Unit's
-     * attacks deal.
-     */
-    public int damage;
+    public Jobs.JobsEnum job;
 
     /// <summary>
     /// The Unit's current HP.

@@ -126,7 +126,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66a37e823066a041b21143d64c6552d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: 
+  unitName: Null
   unitLevel: 0
-  damage: 0
-  maxHP: 0
+  job: 0
+  baseStats:
+    vitality: 0
+    resource: 0
+    intelligence: 0
+    strength: 0
+    magicResist: 0
+    armor: 0
+    speed: 0
+  stats:
+    vitality: 0
+    resource: 0
+    intelligence: 0
+    strength: 0
+    magicResist: 0
+    armor: 0
+    speed: 0

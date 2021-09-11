@@ -40,8 +40,8 @@ public class UnitTest
     {
         Assert.AreEqual(unit.stats.vitality, 100);
         Assert.AreEqual(unit.CurrentHP, unit.stats.vitality);
-        Assert.AreEqual(unit.damage, 10);
-        Assert.AreEqual(unit.damage, 10);
+        Assert.AreEqual(unit.stats.strength, 10);
+        Assert.AreEqual(unit.stats.strength, 10);
     }
 
     /**

@@ -1,9 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class Jobs
 {
+    public enum JobsEnum
+    {
+        Berserker, Assassin, Mage, Herbalist, Sage, Marksman
+    }
+
     public static class Berserker
     {
         public static int vitalityMod = 20;

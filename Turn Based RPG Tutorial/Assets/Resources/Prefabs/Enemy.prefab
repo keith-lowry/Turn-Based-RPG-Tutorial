@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Enemy
   unitLevel: 1
-  damage: 3
+  job: 1
   baseStats:
     vitality: 100
     resource: 10
