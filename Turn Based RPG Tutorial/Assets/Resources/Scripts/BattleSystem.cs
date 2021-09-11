@@ -17,8 +17,8 @@ public class BattleSystem : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
 
-    public Transform playerStation; //location of player on battlefield
-    public Transform enemyStation; //location of enemy on battlefield
+    public BattleStation playerStation; //location of player on battlefield
+    public BattleStation enemyStation; //location of enemy on battlefield
 
     private Unit playerUnit;
     private Unit enemyUnit;
@@ -40,10 +40,10 @@ public class BattleSystem : MonoBehaviour
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
-        GameObject playerGO = Instantiate(playerPrefab, playerStation);
+        GameObject playerGO = Instantiate(playerPrefab, playerStation.gameObject.transform);
         playerUnit = playerGO.GetComponent<Unit>();
 
-        GameObject enemyGO = Instantiate(enemyPrefab, enemyStation);
+        GameObject enemyGO = Instantiate(enemyPrefab, enemyStation.gameObject.transform);
         enemyUnit = enemyGO.GetComponent<Unit>();
 
         dialogueText.text = enemyUnit.unitName;
@@ -86,6 +86,9 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator EnemyTurn()
     {
+        playerStation.DisableTurnCircle();
+        enemyStation.EnableTurnCircle();
+
         dialogueText.text = enemyUnit.unitName + " attacks!";
 
         yield return new WaitForSeconds(1f);
@@ -125,6 +128,9 @@ public class BattleSystem : MonoBehaviour
      */
     private void PlayerTurn()
     {
+        playerStation.EnableTurnCircle();
+        enemyStation.DisableTurnCircle();
+
         dialogueText.text = "Choose an action: ";
     }
 

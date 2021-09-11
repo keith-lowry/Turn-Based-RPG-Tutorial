@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1391af69a4ab0ba42812b648db0fca34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  turnCircle: {fileID: 4992407924004327581}
 --- !u!1 &4992407924004327581
 GameObject:
   m_ObjectHideFlags: 0
