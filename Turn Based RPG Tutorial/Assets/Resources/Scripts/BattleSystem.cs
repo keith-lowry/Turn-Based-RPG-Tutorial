@@ -40,10 +40,12 @@ public class BattleSystem : MonoBehaviour
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
-        GameObject playerGO = Instantiate(playerPrefab, playerStation.gameObject.transform);
+        GameObject playerGO = Instantiate(playerPrefab, 
+            playerStation.gameObject.transform);
         playerUnit = playerGO.GetComponent<Unit>();
 
-        GameObject enemyGO = Instantiate(enemyPrefab, enemyStation.gameObject.transform);
+        GameObject enemyGO = Instantiate(enemyPrefab, 
+            enemyStation.gameObject.transform);
         enemyUnit = enemyGO.GetComponent<Unit>();
 
         dialogueText.text = enemyUnit.unitName;
