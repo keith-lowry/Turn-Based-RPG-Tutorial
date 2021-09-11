@@ -39,7 +39,7 @@ public class UnitTest
     public void TestUnitFields()
     {
         Assert.AreEqual(unit.maxHP, 100);
-        Assert.AreEqual(unit.currentHP, unit.maxHP);
+        Assert.AreEqual(unit.CurrentHP, unit.maxHP);
         Assert.AreEqual(unit.damage, 10);
         Assert.AreEqual(unit.damage, 10);
     }
@@ -51,10 +51,10 @@ public class UnitTest
     [Test]
     public void TestUnitTakeDamage()
     {
-        Assert.AreEqual(unit.currentHP, 100);
+        Assert.AreEqual(unit.CurrentHP, 100);
 
         unit.TakeDamage(10); 
-        Assert.AreEqual(unit.currentHP, 90); //unit took 10 damage
+        Assert.AreEqual(unit.CurrentHP, 90); //unit took 10 damage
     }
 
     /**
@@ -65,11 +65,11 @@ public class UnitTest
     [Test]
     public void TestUnitDie()
     {
-        Assert.AreEqual(unit.currentHP, 100);
+        Assert.AreEqual(unit.CurrentHP, 100);
 
         Assert.IsFalse(unit.TakeDamage(10)); //unit does not die
         Assert.IsTrue(unit.TakeDamage(100)); //unit dies
-        Assert.IsTrue(unit.currentHP <= 0);
+        Assert.IsTrue(unit.CurrentHP <= 0);
     }
 
 

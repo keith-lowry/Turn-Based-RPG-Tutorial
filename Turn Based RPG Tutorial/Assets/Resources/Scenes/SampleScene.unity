@@ -166,8 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c0eb4c64cdc2f14393f07b70b7b9521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 8635454020321308955, guid: 8080dc59b6d1c124ea04813409add3bf, type: 3}
-  enemyPrefab: {fileID: 3873828640564081823, guid: 08468d9bf9b0d334fb8414f8afc17feb, type: 3}
+  playerPrefab: {fileID: 6546595977003245224, guid: 8080dc59b6d1c124ea04813409add3bf, type: 3}
+  enemyPrefab: {fileID: 7574299382451068738, guid: 08468d9bf9b0d334fb8414f8afc17feb, type: 3}
   playerStation: {fileID: 1710768051}
   enemyStation: {fileID: 2123672833}
   dialogueText: {fileID: 1491005334}
@@ -345,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4992407923430369194, guid: 3af07d2b85ee8054dbdb2db54b2dbbba, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4992407923430369194, guid: 3af07d2b85ee8054dbdb2db54b2dbbba, type: 3}
       propertyPath: m_LocalPosition.z
@@ -985,7 +985,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &585142765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1027,7 +1027,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1069079813
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &585142767
@@ -1520,7 +1520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4992407923430369194, guid: 3af07d2b85ee8054dbdb2db54b2dbbba, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4992407923430369194, guid: 3af07d2b85ee8054dbdb2db54b2dbbba, type: 3}
       propertyPath: m_LocalPosition.z

@@ -8,13 +8,45 @@ using UnityEngine;
  */
 public class Unit : MonoBehaviour
 {
+    /**
+     * The Unit's name.
+     */
     public string unitName;
+
+    /**
+     * The Unit's current level.
+     */
     public int unitLevel;
 
+    /**
+     * Amount of damage the Unit's
+     * attacks deal.
+     */
     public int damage;
 
+    /**
+     * Maximum amount of HP the Unit
+     * can have.
+     */
     public int maxHP;
-    public int currentHP;
+
+    /// <summary>
+    /// The Unit's current HP.
+    /// </summary>
+    public int CurrentHP
+    {
+        get { return currentHP; }
+    }
+
+    /// <summary>
+    /// The Unit's current HP.
+    /// </summary>
+    private int currentHP;
+
+    public void Awake()
+    {
+        currentHP = maxHP;
+    }
 
     /**
      * Makes the unit take damage.
@@ -26,7 +58,7 @@ public class Unit : MonoBehaviour
     {
         currentHP -= dmg;
 
-        if (currentHP <= 0)
+        if (CurrentHP <= 0)
         {
             return true;
         }

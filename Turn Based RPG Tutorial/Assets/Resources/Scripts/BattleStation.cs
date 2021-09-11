@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class BattleStation : MonoBehaviour
 {
-    public GameObject turnCircle;
+    private SpriteRenderer sp;
+
+    public void Start()
+    {
+        sp = GetComponent<SpriteRenderer>();
+        sp.enabled = false;
+    }
 
     /**
      * Enable the Station's turn circle.
      */
     public void EnableTurnCircle()
     {
-        turnCircle.SetActive(true);
+        sp.enabled = true;
     }
 
     /**
@@ -19,6 +25,6 @@ public class BattleStation : MonoBehaviour
      */
     public void DisableTurnCircle()
     {
-        turnCircle.SetActive(false);
+        sp.enabled = false;
     }
 }

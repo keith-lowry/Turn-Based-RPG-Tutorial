@@ -65,7 +65,7 @@ public class BattleSystem : MonoBehaviour
         // Damage the enemy
         bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
 
-        enemyHUD.SetHP(enemyUnit.currentHP);
+        enemyHUD.SetHP(enemyUnit.CurrentHP);
         dialogueText.text = "The attack is successful!"; 
         
         yield return new WaitForSeconds(2f);
@@ -97,7 +97,7 @@ public class BattleSystem : MonoBehaviour
 
         bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
 
-        playerHUD.SetHP(playerUnit.currentHP);
+        playerHUD.SetHP(playerUnit.CurrentHP);
 
         yield return new WaitForSeconds(1f);
 
