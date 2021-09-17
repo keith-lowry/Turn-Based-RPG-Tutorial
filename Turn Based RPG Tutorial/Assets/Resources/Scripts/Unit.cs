@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
@@ -32,7 +33,7 @@ public class Unit : MonoBehaviour
     /// </summary>
     public int CurrentHP
     {
-        get { return currentHP; }
+        get { return currentHP;}
     }
 
     public UnitStats baseStats;
@@ -58,12 +59,27 @@ public class Unit : MonoBehaviour
     {
         currentHP -= dmg;
 
-        if (CurrentHP <= 0)
+        if (currentHP <= 0)
         {
             return true;
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Heals the player for
+    /// a certain amount.
+    /// </summary>
+    /// <param name="heal"></param>
+    public void Heal(int heal)
+    {
+        currentHP += heal;
+
+        if (currentHP > stats.vitality)
+        {
+            currentHP = stats.vitality;
+        }
     }
 
     /**

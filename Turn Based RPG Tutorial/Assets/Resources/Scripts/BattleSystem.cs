@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
+using Random = System.Random;
 
 /**
  * Enum representing different states
@@ -15,21 +18,30 @@ public enum BattleState
 
 public class BattleSystem : MonoBehaviour
 {
+    #region Public Fields
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
 
     public BattleStation playerStation; //location of player on battlefield
     public BattleStation enemyStation; //location of enemy on battlefield
 
-    private Unit playerUnit;
-    private Unit enemyUnit;
-
-    public TextMeshProUGUI dialogueText;
+    public ActionScreen actionScreen;
 
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
 
     public BattleState state;
+    #endregion
+
+    #region Private Fields
+    private static readonly string[] battleStartDialogue = {" approaches!",
+        " corners your party!", " ambushes you!"};
+    private Unit playerUnit;
+    private Unit enemyUnit;
+    private HealthPotion playerPotion;
+    #endregion
+
+    #region Set Up
 
     // Start is called before the first frame update
     void Start()
@@ -41,15 +53,19 @@ public class BattleSystem : MonoBehaviour
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
-        GameObject playerGO = Instantiate(playerPrefab, 
+        GameObject playerGO = Instantiate(playerPrefab,
             playerStation.gameObject.transform);
         playerUnit = playerGO.GetComponent<Unit>();
 
-        GameObject enemyGO = Instantiate(enemyPrefab, 
+        GameObject enemyGO = Instantiate(enemyPrefab,
             enemyStation.gameObject.transform);
         enemyUnit = enemyGO.GetComponent<Unit>();
 
-        dialogueText.text = enemyUnit.unitName;
+        playerPotion = playerGO.GetComponent<HealthPotion>();
+
+        //Start Dialogue
+        actionScreen.SetMode(ActionScreenMode.Dialogue);
+        actionScreen.SetDialogue(enemyUnit.unitName + GetStartDialogue());
 
         playerHUD.SetHUD(playerUnit);
         enemyHUD.SetHUD(enemyUnit);
@@ -61,14 +77,19 @@ public class BattleSystem : MonoBehaviour
         PlayerTurn();
     }
 
-    IEnumerator PlayerAttack()
+    #endregion
+
+    #region Turn Actions
+    private IEnumerator PlayerAttack()
     {
+        actionScreen.SetMode(ActionScreenMode.Dialogue);
+
         // Damage the enemy
         bool isDead = enemyUnit.TakeDamage(playerUnit.stats.strength);
 
         enemyHUD.SetHP(enemyUnit.CurrentHP);
-        dialogueText.text = "The attack is successful!"; 
-        
+        actionScreen.SetDialogue("The attack is successful!");
+
         yield return new WaitForSeconds(2f);
 
         // Check if enemy is dead
@@ -87,12 +108,83 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    private IEnumerator UseItem()
+    {
+        yield return null;
+    }
+
+    private IEnumerator Sorry()
+    {
+        actionScreen.SetMode(ActionScreenMode.Dialogue);
+        actionScreen.SetDialogue("I can't let you do that");
+
+        yield return new WaitForSeconds(1.5f);
+
+        actionScreen.SetMode(ActionScreenMode.Actions);
+
+    }
+
+    #endregion
+
+    #region OnClick Events
+    public void OnClickUnimplemented()
+    {
+        StartCoroutine(Sorry());
+    }
+
+    public void OnClickItems()
+    {
+        actionScreen.SetMode(ActionScreenMode.Items);
+    }
+
+    public void OnClickConsumable(ConsumableButton c)
+    {
+        Consumables type = c.consumableType;
+
+        if (type.Equals(Consumables.HealthPotion))
+        {
+            playerPotion.Use(playerUnit, enemyUnit);
+        }
+        playerHUD.hpSlider.value = playerUnit.CurrentHP;
+
+        state = BattleState.ENEMYTURN;
+        StartCoroutine(EnemyTurn());
+    }
+
+    /**
+    * Called when player clicks attack button.
+    */
+    public void OnClickAttackButton()
+    {
+        if (state != BattleState.PLAYERTURN)
+        {
+            return;
+        }
+
+        StartCoroutine(PlayerAttack());
+        state = BattleState.ENEMYTURN;
+    }
+    #endregion
+
+
+    /**
+     * Update UI for player's turn.
+     */
+    private void PlayerTurn()
+    {
+        actionScreen.SetMode(ActionScreenMode.Actions);
+
+        playerStation.EnableTurnCircle();
+        enemyStation.DisableTurnCircle();
+    }
+
     private IEnumerator EnemyTurn()
     {
         playerStation.DisableTurnCircle();
         enemyStation.EnableTurnCircle();
 
-        dialogueText.text = enemyUnit.unitName + " attacks!";
+        actionScreen.SetMode(ActionScreenMode.Dialogue);
+        actionScreen.SetDialogue(enemyUnit.unitName + " attacks!");
 
         yield return new WaitForSeconds(1f);
 
@@ -110,44 +202,37 @@ public class BattleSystem : MonoBehaviour
         else
         {
             state = BattleState.PLAYERTURN;
-            PlayerTurn(); }
+            PlayerTurn();
+        }
     }
 
     private void EndBattle()
     {
         if (state == BattleState.WON)
         {
-            dialogueText.text = "You've won!";
+            actionScreen.SetDialogue("You won!");
         }
         else if (state == BattleState.LOST)
         {
-            dialogueText.text = "You lost";
+            actionScreen.SetDialogue("You lost");
         }
     }
 
+    #region Helper Methods
     /**
-     * Update dialogue text for
-     * player's turn.
+     * Get a random string of dialogue
+     * for battle start.
      */
-    private void PlayerTurn()
+    private String GetStartDialogue()
     {
-        playerStation.EnableTurnCircle();
-        enemyStation.DisableTurnCircle();
+        Random r = new Random();
 
-        dialogueText.text = "Choose an action: ";
+        int i = r.Next(battleStartDialogue.Length);
+
+        return battleStartDialogue[i];
     }
 
-    /**
-     * Called when player clicks attack button.
-     */
-    public void OnAttackButton()
-    {
-        if (state != BattleState.PLAYERTURN)
-        {
-            return;
-        }
 
-        StartCoroutine(PlayerAttack());
-        state = BattleState.ENEMYTURN;
-    }
+    #endregion
+
 }
