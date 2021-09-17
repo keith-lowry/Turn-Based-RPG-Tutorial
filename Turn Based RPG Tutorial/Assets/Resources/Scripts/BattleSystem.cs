@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /**
  * Enum representing different states
@@ -23,7 +24,7 @@ public class BattleSystem : MonoBehaviour
     private Unit playerUnit;
     private Unit enemyUnit;
 
-    public Text dialogueText;
+    public TextMeshProUGUI dialogueText;
 
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
