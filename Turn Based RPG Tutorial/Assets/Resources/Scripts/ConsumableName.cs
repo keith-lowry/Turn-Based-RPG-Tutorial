@@ -7,14 +7,15 @@ using Sirenix.Serialization;
 using UnityEngine;
 
 
-public enum Consumables
+public enum ConsumableName
 {
-    HealthPotion
+    HealthPotion,
 }
 
 
-public abstract class Consumable : MonoBehaviour
+public abstract class Consumable
 {
+    public int quantity;
 
     /**
      * Activates the Consumable's effect. Decrements

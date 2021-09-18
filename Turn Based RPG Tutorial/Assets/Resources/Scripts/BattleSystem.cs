@@ -30,6 +30,8 @@ public class BattleSystem : MonoBehaviour
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
 
+    public Inventory partyInventory;
+
     public BattleState state;
     #endregion
 
@@ -38,7 +40,6 @@ public class BattleSystem : MonoBehaviour
         " corners your party!", " ambushes you!"};
     private Unit playerUnit;
     private Unit enemyUnit;
-    private HealthPotion playerPotion;
     #endregion
 
     #region Set Up
@@ -53,6 +54,8 @@ public class BattleSystem : MonoBehaviour
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
+        partyInventory.AddItem(ConsumableName.HealthPotion, 2);
+
         GameObject playerGO = Instantiate(playerPrefab,
             playerStation.gameObject.transform);
         playerUnit = playerGO.GetComponent<Unit>();
@@ -60,8 +63,6 @@ public class BattleSystem : MonoBehaviour
         GameObject enemyGO = Instantiate(enemyPrefab,
             enemyStation.gameObject.transform);
         enemyUnit = enemyGO.GetComponent<Unit>();
-
-        playerPotion = playerGO.GetComponent<HealthPotion>();
 
         //Start Dialogue
         actionScreen.SetMode(ActionScreenMode.Dialogue);
@@ -137,14 +138,12 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Items);
     }
 
-    public void OnClickConsumable(ConsumableButton c)
+    public void OnClickItem(ConsumableButton c)
     {
-        Consumables type = c.consumableType;
+        ConsumableName type = c.consumableName;
+        Consumable consumable = partyInventory.GetItem(type);
+        consumable.Use(playerUnit, enemyUnit);
 
-        if (type.Equals(Consumables.HealthPotion))
-        {
-            playerPotion.Use(playerUnit, enemyUnit);
-        }
         playerHUD.hpSlider.value = playerUnit.CurrentHP;
 
         state = BattleState.ENEMYTURN;

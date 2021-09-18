@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class ConsumableButton : MonoBehaviour
 {
-    public Consumables consumableType;
+    public ConsumableName consumableName;
 }

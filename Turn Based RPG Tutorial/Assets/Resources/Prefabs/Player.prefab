@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6546595977003245227}
   - component: {fileID: 6546595977003245225}
-  - component: {fileID: 3603139770596145868}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -64,19 +63,6 @@ MonoBehaviour:
     magicResist: 0
     armor: 0
     speed: 0
---- !u!114 &3603139770596145868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6546595977003245224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973c7a33d2ab09c47bb22a172b2a6e48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  quantity: 3
 --- !u!1 &7210957953329932153
 GameObject:
   m_ObjectHideFlags: 0
