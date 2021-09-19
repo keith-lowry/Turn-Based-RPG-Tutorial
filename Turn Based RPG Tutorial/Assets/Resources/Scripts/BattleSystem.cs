@@ -57,11 +57,11 @@ public class BattleSystem : MonoBehaviour
         partyInventory.AddItem(ConsumableName.HealthPotion, 2);
 
         GameObject playerGO = Instantiate(playerPrefab,
-            playerStation.gameObject.transform);
+            playerStation.gameObject.transform.position, Quaternion.identity);
         playerUnit = playerGO.GetComponent<Unit>();
 
         GameObject enemyGO = Instantiate(enemyPrefab,
-            enemyStation.gameObject.transform);
+            enemyStation.gameObject.transform.position, Quaternion.identity);
         enemyUnit = enemyGO.GetComponent<Unit>();
 
         //Start Dialogue
