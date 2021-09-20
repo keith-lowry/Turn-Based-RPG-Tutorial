@@ -28,6 +28,17 @@ public class ActionScreen : MonoBehaviour
         mode = ActionScreenMode.Dialogue;
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (mode.Equals(ActionScreenMode.Items))
+            {
+                SetMode(ActionScreenMode.Actions);
+            }
+        }
+    }
+
     #region Setters
     public void SetMode(ActionScreenMode newMode)
     {

@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private Dictionary<ConsumableName, Consumable> itemMap; //party's current
+    private Dictionary<ConsumableType, Consumable> itemMap; //party's current
                                                             //items
 
 
     public void Awake()
     {
-        itemMap = new Dictionary<ConsumableName, Consumable>();
+        itemMap = new Dictionary<ConsumableType, Consumable>();
 
         //Add all possible items
         SetUpMap();
@@ -24,7 +24,7 @@ public class Inventory : MonoBehaviour
     /// <param name="name">The name of the consumable.</param>
     /// <returns>The associated consumable if it is in the
     /// inventory. Null otherwise. </returns>
-    public Consumable GetItem(ConsumableName name)
+    public Consumable GetItem(ConsumableType name)
     {
         if (itemMap.ContainsKey(name))
         {
@@ -43,7 +43,7 @@ public class Inventory : MonoBehaviour
     /// <param name="amount">The amount to be added, must be greater
     /// than 0.</param>
     /// <returns>True if the consumable was added, false otherwise.</returns>
-    public bool AddItem(ConsumableName name, int amount)
+    public bool AddItem(ConsumableType name, int amount)
     {
         if (itemMap.ContainsKey(name) && amount > 0)
         {
@@ -61,6 +61,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     private void SetUpMap()
     {
-        itemMap.Add(ConsumableName.HealthPotion, new HealthPotion());
+        HealthPotion hpPot = new HealthPotion();
+        itemMap.Add(hpPot.Type, hpPot);
     }
 }

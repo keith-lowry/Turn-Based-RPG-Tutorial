@@ -54,7 +54,7 @@ public class BattleSystem : MonoBehaviour
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
-        partyInventory.AddItem(ConsumableName.HealthPotion, 2);
+        partyInventory.AddItem(ConsumableType.HealthPotion, 2);
 
         GameObject playerGO = Instantiate(playerPrefab,
             playerStation.gameObject.transform.position, Quaternion.identity);
@@ -109,9 +109,27 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    private IEnumerator UseItem()
+    private IEnumerator UseItem(Consumable consumable)
     {
-        yield return null;
+        bool wasUsed = consumable.Use(playerUnit, enemyUnit);
+        playerHUD.hpSlider.value = playerUnit.CurrentHP;
+
+        if (wasUsed)
+        {
+            String dialogue = consumable.getUseDialogue(playerUnit, enemyUnit);
+            actionScreen.SetMode(ActionScreenMode.Dialogue);
+            actionScreen.SetDialogue(dialogue);
+            yield return new WaitForSeconds(2f);
+            state = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
+        else
+        {
+            actionScreen.SetMode(ActionScreenMode.Dialogue);
+            actionScreen.SetDialogue("You're out of that.");
+            yield return new WaitForSeconds(2f);
+            actionScreen.SetMode(ActionScreenMode.Items);
+        }
     }
 
     private IEnumerator Sorry()
@@ -140,14 +158,9 @@ public class BattleSystem : MonoBehaviour
 
     public void OnClickItem(ConsumableButton c)
     {
-        ConsumableName type = c.consumableName;
+        ConsumableType type = c.type;
         Consumable consumable = partyInventory.GetItem(type);
-        consumable.Use(playerUnit, enemyUnit);
-
-        playerHUD.hpSlider.value = playerUnit.CurrentHP;
-
-        state = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
+        StartCoroutine(UseItem(consumable));
     }
 
     /**

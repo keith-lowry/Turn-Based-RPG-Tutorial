@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,16 @@ public class HealthPotion : Consumable
 
     public static readonly int baseHeal = 50;
 
+    public ConsumableType Type
+    {
+        get
+        {
+            return type;
+        }
+    }
+
+    private readonly ConsumableType type = ConsumableType.HealthPotion;
+
     public HealthPotion()
     {
         quantity = 0;
@@ -23,12 +34,28 @@ public class HealthPotion : Consumable
         quantity = i;
     }
 
-    public override void Use(Unit playerUnit, Unit enemyUnit)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="playerUnit"></param>
+    /// <param name="enemyUnit"></param>
+    /// <returns>Returns true if the item was used,
+    /// false if there was no item left to use.</returns>
+    public override bool Use(Unit playerUnit, Unit enemyUnit)
     {
         if (quantity > 0)
         {
             playerUnit.Heal(baseHeal);
             quantity--;
+            return true;
         }
+
+        return false;
+    }
+
+
+    public override string getUseDialogue(Unit playerUnit, Unit enemyUnit)
+    {
+        return playerUnit.unitName + " healed " + 50 + " health.";
     }
 }
