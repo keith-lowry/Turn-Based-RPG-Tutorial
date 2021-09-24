@@ -56,6 +56,18 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// Adds one of a specific consumable to the party's
+    /// inventory.
+    /// </summary>
+    /// <param name="name">The name of the consumable. Must already
+    /// be in the item Map.</param>
+    /// <returns>True if the consumable was added, false otherwise.</returns>
+    public bool AddItem(ConsumableType name)
+    {
+        return (AddItem(name, 1));
+    }
+
+    /// <summary>
     /// Adds all possible items to the
     /// itemMap.
     /// </summary>

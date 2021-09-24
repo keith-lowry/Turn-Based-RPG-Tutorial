@@ -39,13 +39,17 @@ public class Unit : MonoBehaviour
     public UnitStats baseStats;
 
     public UnitStats stats;
-    
+
+    private BattleHUD hud;
 
     public void Awake()
     {
-        stats = new UnitStats(baseStats.vitality, baseStats.resource, 
-            baseStats.intelligence, baseStats.strength, 
-            baseStats.magicResist, baseStats.armor, baseStats.speed);
+        stats = new UnitStats(baseStats.vitality, baseStats.resource,
+            baseStats.intelligence, baseStats.strength,
+            baseStats.magicResist, baseStats.armor, baseStats.speed,
+            baseStats.critRate);
+
+
         currentHP = stats.vitality;
     }
 
@@ -57,13 +61,15 @@ public class Unit : MonoBehaviour
      */
     public bool TakeDamage(int dmg)
     {
-        currentHP -= dmg;
-
-        if (currentHP <= 0)
+        if ((currentHP - dmg) <= 0)
         {
+            currentHP = 0;
+            hud.SetHP(currentHP); //update hud
             return true;
         }
 
+        currentHP -= dmg; 
+        hud.SetHP(currentHP); //update hud
         return false;
     }
 
@@ -80,6 +86,17 @@ public class Unit : MonoBehaviour
         {
             currentHP = stats.vitality;
         }
+
+        hud.SetHP(currentHP); //update hud
+    }
+
+    public void AddHUD(BattleHUD newHud)
+    {
+        if (newHud != null)
+        {
+            hud = newHud;
+            hud.SetUpHUD(this);
+        }
     }
 
     /**
@@ -95,8 +112,9 @@ public class Unit : MonoBehaviour
         public int magicResist;
         public int armor;
         public int speed;
+        public int critRate;
 
-        public UnitStats(int v, int r, int i, int s, int mr, int a, int sp)
+        public UnitStats(int v, int r, int i, int s, int mr, int a, int sp, int cr)
         {
             vitality = v;
             resource = r;
@@ -105,6 +123,7 @@ public class Unit : MonoBehaviour
             magicResist = mr;
             armor = a;
             speed = sp;
+            critRate = cr;
         }
     }
 }

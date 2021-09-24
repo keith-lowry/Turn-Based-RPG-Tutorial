@@ -25,17 +25,19 @@ public class BattleSystem : MonoBehaviour
     public BattleStation playerStation; //location of player on battlefield
     public BattleStation enemyStation; //location of enemy on battlefield
 
-    public ActionScreen actionScreen;
+    public Inventory partyInventory;
+    #endregion
 
+    #region Canvases and UI
+    public ActionScreen actionScreen;
+    public GameObject hudPrefab;
+    public GameObject hudCanvas;
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
-
-    public Inventory partyInventory;
-
-    public BattleState state;
     #endregion
 
     #region Private Fields
+    private BattleState state;
     private static readonly string[] battleStartDialogue = {" approaches!",
         " corners your party!", " ambushes you!"};
     private Unit playerUnit;
@@ -68,8 +70,8 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Dialogue);
         actionScreen.SetDialogue(enemyUnit.unitName + GetStartDialogue());
 
-        playerHUD.SetHUD(playerUnit);
-        enemyHUD.SetHUD(enemyUnit);
+        playerUnit.AddHUD(playerHUD);
+        enemyUnit.AddHUD(enemyHUD);
 
         yield return new WaitForSeconds(2f); //wait then start player turn
 
@@ -88,7 +90,6 @@ public class BattleSystem : MonoBehaviour
         // Damage the enemy
         bool isDead = enemyUnit.TakeDamage(playerUnit.stats.strength);
 
-        enemyHUD.SetHP(enemyUnit.CurrentHP);
         actionScreen.SetDialogue("The attack is successful!");
 
         yield return new WaitForSeconds(2f);
@@ -112,7 +113,6 @@ public class BattleSystem : MonoBehaviour
     private IEnumerator UseItem(Consumable consumable)
     {
         bool wasUsed = consumable.Use(playerUnit, enemyUnit);
-        playerHUD.hpSlider.value = playerUnit.CurrentHP;
 
         if (wasUsed)
         {
@@ -201,8 +201,6 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         bool isDead = playerUnit.TakeDamage(enemyUnit.stats.strength);
-
-        playerHUD.SetHP(playerUnit.CurrentHP);
 
         yield return new WaitForSeconds(1f);
 
