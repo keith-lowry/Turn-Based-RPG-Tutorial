@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,32 +9,17 @@ using UnityEngine.UI;
  */
 public class BattleHUD : MonoBehaviour
 {
-    private Text nameText;
-    private Text levelText;
-    private Slider hpSlider;
+    public Text nameText;
+    public Text levelText;
+    public Slider hpSlider;
 
-    public void Awake()
-    {
-        GameObject name = transform.GetChild(1).gameObject;
-        GameObject level = transform.GetChild(2).gameObject;
-        GameObject hp = transform.GetChild(3).gameObject;
 
-        nameText = name.GetComponent<Text>();
-        levelText = level.GetComponent<Text>();
-        hpSlider = hp.GetComponent<Slider>();
-
-        if (nameText == null || levelText == null || hpSlider == null)
-        {
-            Debug.Log("The order of the Battle Hud's children was changed. The " +
-                      "order should be: ");
-            Debug.Log("0 - Background Image");
-            Debug.Log("1 - Name Text");
-            Debug.Log("2 - Level Text");
-            Debug.Log("3 - HP Slider");
-        }
-    }
-
-    public void SetUpHUD(Unit unit)
+    /// <summary>
+    /// Updates all elements of the HUD
+    /// to match the given Unit's stats.
+    /// </summary>
+    /// <param name="unit"></param>
+    public void UpdateHUD(Unit unit)
     {
         nameText.text = unit.unitName;
         levelText.text = "Lvl " + unit.unitLevel;
@@ -42,16 +28,42 @@ public class BattleHUD : MonoBehaviour
         hpSlider.value = unit.CurrentHP;
     }
 
-    /**
-     * Sets the HP slider value.
-     */
-    public void SetHP(int hp)
+    /// <summary>
+    /// Sets the HP slider value.
+    /// </summary>
+    /// <param name="hp">The unit's HP.</param>
+    public void UpdateHP(int hp)
     {
         hpSlider.value = hp;
     }
 
-    public void SetLevel(int lvl)
+    /// <summary>
+    /// Sets the HP slider max value.
+    /// </summary>
+    /// <param name="maxHP">The unit's max HP.</param>
+    public void UpdateMaxHP(int maxHP)
+    {
+        hpSlider.maxValue = maxHP;
+    }
+
+    /// <summary>
+    /// Sets the level text.
+    /// </summary>
+    /// <param name="lvl">The unit's current level.</param>
+    public void UpdateLevel(int lvl)
     {
         levelText.text = "Lvl " + lvl;
     }
+
+    /// <summary>
+    /// Move the BattleHUD to the given unit's
+    /// location in worldspace.
+    /// </summary>
+    /// <param name="unit"></param>
+    public void MoveToUnit(Unit unit)
+    {
+        throw new NotImplementedException();
+    }
+
+
 }

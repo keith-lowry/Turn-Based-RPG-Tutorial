@@ -31,7 +31,7 @@ public class BattleSystem : MonoBehaviour
     #region Canvases and UI
     public ActionScreen actionScreen;
     public GameObject hudPrefab;
-    public GameObject hudCanvas;
+    public Transform hudCanvas;
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
     #endregion
@@ -58,20 +58,24 @@ public class BattleSystem : MonoBehaviour
     {
         partyInventory.AddItem(ConsumableType.HealthPotion, 2);
 
+        //Add units and huds
         GameObject playerGO = Instantiate(playerPrefab,
             playerStation.gameObject.transform.position, Quaternion.identity);
         playerUnit = playerGO.GetComponent<Unit>();
+
+        GameObject hud = Instantiate(hudPrefab, playerUnit.transform.position, Quaternion.identity);
+        hud.transform.SetParent(hudCanvas, false);
 
         GameObject enemyGO = Instantiate(enemyPrefab,
             enemyStation.gameObject.transform.position, Quaternion.identity);
         enemyUnit = enemyGO.GetComponent<Unit>();
 
+        playerUnit.AddHUD(playerHUD);
+        enemyUnit.AddHUD(enemyHUD);
+
         //Start Dialogue
         actionScreen.SetMode(ActionScreenMode.Dialogue);
         actionScreen.SetDialogue(enemyUnit.unitName + GetStartDialogue());
-
-        playerUnit.AddHUD(playerHUD);
-        enemyUnit.AddHUD(enemyHUD);
 
         yield return new WaitForSeconds(2f); //wait then start player turn
 

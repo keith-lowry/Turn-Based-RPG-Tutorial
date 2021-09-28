@@ -42,12 +42,21 @@ public class Unit : MonoBehaviour
 
     private BattleHUD hud;
 
+    private SpriteRenderer sr;
+
+    public SpriteRenderer Sprite
+    {
+        get { return sr; }
+    }
+
     public void Awake()
     {
         stats = new UnitStats(baseStats.vitality, baseStats.resource,
             baseStats.intelligence, baseStats.strength,
             baseStats.magicResist, baseStats.armor, baseStats.speed,
             baseStats.critRate);
+
+        //sr = GetComponentInChildren<SpriteRenderer>();
 
 
         currentHP = stats.vitality;
@@ -64,12 +73,12 @@ public class Unit : MonoBehaviour
         if ((currentHP - dmg) <= 0)
         {
             currentHP = 0;
-            hud.SetHP(currentHP); //update hud
+            hud.UpdateHP(currentHP); //update hud
             return true;
         }
 
         currentHP -= dmg; 
-        hud.SetHP(currentHP); //update hud
+        hud.UpdateHP(currentHP); //update hud
         return false;
     }
 
@@ -87,7 +96,7 @@ public class Unit : MonoBehaviour
             currentHP = stats.vitality;
         }
 
-        hud.SetHP(currentHP); //update hud
+        hud.UpdateHP(currentHP); //update hud
     }
 
     public void AddHUD(BattleHUD newHud)
@@ -95,7 +104,7 @@ public class Unit : MonoBehaviour
         if (newHud != null)
         {
             hud = newHud;
-            hud.SetUpHUD(this);
+            hud.UpdateHUD(this);
         }
     }
 
