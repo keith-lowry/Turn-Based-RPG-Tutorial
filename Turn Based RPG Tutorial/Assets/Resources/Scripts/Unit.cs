@@ -42,9 +42,13 @@ public class Unit : MonoBehaviour
 
     private BattleHUD hud;
 
+    private BattleStation homeStation;
+
     private SpriteRenderer sr;
 
-    public SpriteRenderer Sprite
+    public Transform head;
+
+    public SpriteRenderer SpriteRenderer
     {
         get { return sr; }
     }
@@ -56,7 +60,7 @@ public class Unit : MonoBehaviour
             baseStats.magicResist, baseStats.armor, baseStats.speed,
             baseStats.critRate);
 
-        //sr = GetComponentInChildren<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
 
 
         currentHP = stats.vitality;
@@ -73,13 +77,36 @@ public class Unit : MonoBehaviour
         if ((currentHP - dmg) <= 0)
         {
             currentHP = 0;
-            hud.UpdateHP(currentHP); //update hud
+            hud.SetHP(currentHP); //update hud
             return true;
         }
 
         currentHP -= dmg; 
-        hud.UpdateHP(currentHP); //update hud
+        hud.SetHP(currentHP); //update hud
         return false;
+    }
+
+    /// <summary>
+    /// Sets the Unit's home station
+    /// in the battlefield.
+    /// </summary>
+    /// <param name="home">The Unit's home station.</param>
+    public void SetHomeStation(BattleStation home)
+    {
+        homeStation = home;
+    }
+
+    /// <summary>
+    /// Moves the Unit to their home station
+    /// on the battlefield.
+    /// </summary>
+    public void MoveToHomeStation()
+    {
+        if (homeStation != null)
+        {
+            transform.SetPositionAndRotation(homeStation.transform.position,
+                Quaternion.identity);
+        }
     }
 
     /// <summary>
@@ -96,15 +123,24 @@ public class Unit : MonoBehaviour
             currentHP = stats.vitality;
         }
 
-        hud.UpdateHP(currentHP); //update hud
+        if (hud != null)
+        { 
+            hud.SetHP(currentHP); //update hud
+        }
+        
     }
 
-    public void AddHUD(BattleHUD newHud)
+    /// <summary>
+    /// Sets the Unit's HUD.
+    /// </summary>
+    /// <param name="newHud">The Unit's HUD.</param>
+    public void SetHUD(BattleHUD newHud)
     {
         if (newHud != null)
         {
             hud = newHud;
-            hud.UpdateHUD(this);
+            hud.PopulateHUD(this);
+            
         }
     }
 

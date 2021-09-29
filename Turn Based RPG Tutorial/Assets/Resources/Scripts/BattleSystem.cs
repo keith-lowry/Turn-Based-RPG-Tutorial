@@ -70,8 +70,8 @@ public class BattleSystem : MonoBehaviour
             enemyStation.gameObject.transform.position, Quaternion.identity);
         enemyUnit = enemyGO.GetComponent<Unit>();
 
-        playerUnit.AddHUD(playerHUD);
-        enemyUnit.AddHUD(enemyHUD);
+        playerUnit.SetHUD(hud.GetComponent<BattleHUD>()); //TODO: revert to playerHUD
+        enemyUnit.SetHUD(enemyHUD);
 
         //Start Dialogue
         actionScreen.SetMode(ActionScreenMode.Dialogue);
