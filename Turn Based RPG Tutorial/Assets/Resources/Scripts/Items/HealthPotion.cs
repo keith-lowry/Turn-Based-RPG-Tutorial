@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Transactions;
 using UnityEngine;
 
 /// <summary>
@@ -9,30 +10,26 @@ using UnityEngine;
 /// 
 /// Not a MonoBehavior.
 /// </summary>
-public class HealthPotion : Consumable
+public class HealthPotion : Item
 {
 
     public static readonly int baseHeal = 50;
 
-    public ConsumableType Type
+    public ItemType Type
     {
         get
         {
-            return type;
+            return HealthPotion.type;
         }
     }
 
-    private readonly ConsumableType type = ConsumableType.HealthPotion;
+    private static readonly ItemType type = ItemType.HealthPotion;
 
-    public HealthPotion()
-    {
-        quantity = 0;
-    }
-
-    public HealthPotion(int i)
-    {
-        quantity = i;
-    }
+    /// <summary>
+    /// Creates a new HealthPotion with
+    /// a default quantity of 1.
+    /// </summary>
+    public HealthPotion() : base() {}
 
     /// <summary>
     /// 
@@ -54,7 +51,7 @@ public class HealthPotion : Consumable
     }
 
 
-    public override string getUseDialogue(Unit playerUnit, Unit enemyUnit)
+    public override string GetUseDialogue(Unit playerUnit, Unit enemyUnit)
     {
         return playerUnit.unitName + " healed " + 50 + " health.";
     }

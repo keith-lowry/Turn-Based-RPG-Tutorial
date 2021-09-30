@@ -54,7 +54,7 @@ public class BattleSystem : MonoBehaviour
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
-        partyInventory.AddItem(ConsumableType.HealthPotion, 2);
+        partyInventory.AddItem(ItemType.HealthPotion, 2);
 
         //Add units and huds
         playerUnit = Instantiate(playerPrefab,
@@ -118,13 +118,13 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    private IEnumerator UseItem(Consumable consumable)
+    private IEnumerator UseItem(Item item)
     {
-        bool wasUsed = consumable.Use(playerUnit, enemyUnit);
+        bool wasUsed = item.Use(playerUnit, enemyUnit);
 
         if (wasUsed)
         {
-            String dialogue = consumable.getUseDialogue(playerUnit, enemyUnit);
+            String dialogue = item.GetUseDialogue(playerUnit, enemyUnit);
             actionScreen.SetMode(ActionScreenMode.Dialogue);
             actionScreen.SetDialogue(dialogue);
             yield return new WaitForSeconds(2f);
@@ -166,9 +166,9 @@ public class BattleSystem : MonoBehaviour
 
     public void OnClickItem(ConsumableButton c)
     {
-        ConsumableType type = c.type;
-        Consumable consumable = partyInventory.GetItem(type);
-        StartCoroutine(UseItem(consumable));
+        ItemType type = c.type;
+        Item item = partyInventory.GetItem(type);
+        StartCoroutine(UseItem(item));
     }
 
     /**

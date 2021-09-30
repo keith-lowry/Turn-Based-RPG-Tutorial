@@ -7,26 +7,38 @@ using Sirenix.Serialization;
 using UnityEngine;
 
 
-public abstract class Consumable
+/// <summary>
+/// Abstract class representing an Item
+/// that can be used in battle.
+/// </summary>
+public abstract class Item
 {
     public int quantity;
 
+    /// <summary>
+    /// Creates a new Item with a default quantity
+    /// of 1.
+    /// </summary>
+    public Item()
+    {
+        quantity = 1;
+    }
 
     /// <summary>
-    /// Activates the Consumable's effect. Decrements
+    /// Activates the Item's effect. Decrements
     /// the consumable's quantity.
     /// </summary>
     /// <param name="playerUnit">The player.</param>
     /// <param name="enemyUnit">The enemy.</param>
-    /// <returns>True if the item was used, false
+    /// <returns>True if the Item was used, false
     /// otherwise.</returns>
     public abstract bool Use(Unit playerUnit, Unit enemyUnit);
 
     /// <summary>
-    /// Gets 
+    /// Gets the String dialogue to be displayed
+    /// when the Item is used.
     /// </summary>
-    /// <returns>The String dialogue to be displayed
-    /// when the Consumable is used.</returns>
+    /// <returns>The Item's use dialogue.</returns>
     public abstract String getUseDialogue(Unit playerUnit, Unit enemyUnit);
 
 
