@@ -26,11 +26,6 @@ public class Unit : MonoBehaviour
     /// <summary>
     /// The Unit's current HP.
     /// </summary>
-    private int currentHP;
-
-    /// <summary>
-    /// The Unit's current HP.
-    /// </summary>
     public int CurrentHP
     {
         get { return currentHP;}
@@ -40,18 +35,17 @@ public class Unit : MonoBehaviour
 
     public UnitStats stats;
 
-    private BattleHUD hud;
+    public Transform head;
+
+    /// <summary>
+    /// The Unit's current HP.
+    /// </summary>
+    private int currentHP;
+
+    private UnitHUD hud;
 
     private BattleStation homeStation;
 
-    private SpriteRenderer sr;
-
-    public Transform head;
-
-    public SpriteRenderer SpriteRenderer
-    {
-        get { return sr; }
-    }
 
     public void Awake()
     {
@@ -59,8 +53,6 @@ public class Unit : MonoBehaviour
             baseStats.intelligence, baseStats.strength,
             baseStats.magicResist, baseStats.armor, baseStats.speed,
             baseStats.critRate);
-
-        sr = GetComponentInChildren<SpriteRenderer>();
 
 
         currentHP = stats.vitality;
@@ -87,29 +79,6 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the Unit's home station
-    /// in the battlefield.
-    /// </summary>
-    /// <param name="home">The Unit's home station.</param>
-    public void SetHomeStation(BattleStation home)
-    {
-        homeStation = home;
-    }
-
-    /// <summary>
-    /// Moves the Unit to their home station
-    /// on the battlefield.
-    /// </summary>
-    public void MoveToHomeStation()
-    {
-        if (homeStation != null)
-        {
-            transform.SetPositionAndRotation(homeStation.transform.position,
-                Quaternion.identity);
-        }
-    }
-
-    /// <summary>
     /// Heals the player for
     /// a certain amount.
     /// </summary>
@@ -130,19 +99,56 @@ public class Unit : MonoBehaviour
         
     }
 
+    #region Utility Methods
     /// <summary>
     /// Sets the Unit's HUD.
     /// </summary>
     /// <param name="newHud">The Unit's HUD.</param>
-    public void SetHUD(BattleHUD newHud)
+    public void SetHUD(UnitHUD newHud)
     {
         if (newHud != null)
         {
             hud = newHud;
             hud.PopulateHUD(this);
-            
+
         }
     }
+
+    /// <summary>
+    /// Sets the Unit's home station
+    /// in the battlefield.
+    /// </summary>
+    /// <param name="home">The Unit's home station.</param>
+    public void SetHomeStation(BattleStation home)
+    {
+        homeStation = home;
+    }
+
+    /// <summary>
+    /// Moves the Unit to their home station
+    /// on the battlefield.
+    /// </summary>
+    public void MoveToHomeStation()
+    {
+        MoveToStation(homeStation);
+    }
+
+    /// <summary>
+    /// Moves the Unit to the given station on
+    /// the battlefield.
+    /// </summary>
+    /// <param name="station"></param>
+    public void MoveToStation(BattleStation station)
+    {
+        if (station != null)
+        {
+            transform.SetPositionAndRotation(station.transform.position,
+                Quaternion.identity);
+            hud.MoveToHead();
+        }
+    }
+    #endregion
+
 
     /**
      * Struct holding the Unit's stats.

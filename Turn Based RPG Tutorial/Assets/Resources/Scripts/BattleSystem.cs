@@ -32,8 +32,6 @@ public class BattleSystem : MonoBehaviour
     public ActionScreen actionScreen;
     public GameObject hudPrefab;
     public Transform hudCanvas;
-    public BattleHUD playerHUD;
-    public BattleHUD enemyHUD;
     #endregion
 
     #region Private Fields
@@ -59,19 +57,25 @@ public class BattleSystem : MonoBehaviour
         partyInventory.AddItem(ConsumableType.HealthPotion, 2);
 
         //Add units and huds
-        GameObject playerGO = Instantiate(playerPrefab,
-            playerStation.gameObject.transform.position, Quaternion.identity);
-        playerUnit = playerGO.GetComponent<Unit>();
+        playerUnit = Instantiate(playerPrefab,
+            Vector3.zero, Quaternion.identity).GetComponent<Unit>();
+        UnitHUD playerHUD = Instantiate(hudPrefab, Vector3.zero,
+            Quaternion.identity).GetComponent<UnitHUD>();
 
-        GameObject hud = Instantiate(hudPrefab, playerUnit.transform.position, Quaternion.identity);
-        hud.transform.SetParent(hudCanvas, false);
+        playerHUD.transform.SetParent(hudCanvas, false); //move player HUD to canvas
+        playerUnit.SetHUD(playerHUD); //set player's HUD
+        playerUnit.SetHomeStation(playerStation); //set player's home station
+        playerUnit.MoveToHomeStation(); //move player to home station
 
-        GameObject enemyGO = Instantiate(enemyPrefab,
-            enemyStation.gameObject.transform.position, Quaternion.identity);
-        enemyUnit = enemyGO.GetComponent<Unit>();
+        enemyUnit = Instantiate(enemyPrefab,
+            Vector3.zero, Quaternion.identity).GetComponent<Unit>();
+        UnitHUD enemyHUD = Instantiate(hudPrefab, Vector3.zero, 
+            Quaternion.identity).GetComponent<UnitHUD>();
 
-        playerUnit.SetHUD(hud.GetComponent<BattleHUD>()); //TODO: revert to playerHUD
+        enemyHUD.transform.SetParent(hudCanvas, false);
         enemyUnit.SetHUD(enemyHUD);
+        enemyUnit.SetHomeStation(enemyStation);
+        enemyUnit.MoveToHomeStation();
 
         //Start Dialogue
         actionScreen.SetMode(ActionScreenMode.Dialogue);

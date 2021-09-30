@@ -10,7 +10,7 @@ using Quaternion = UnityEngine.Quaternion;
 /**
  * Script for managing unit HUDS.
  */
-public class BattleHUD : MonoBehaviour
+public class UnitHUD : MonoBehaviour
 {
     public Text nameText;
     public Text levelText;
@@ -72,7 +72,7 @@ public class BattleHUD : MonoBehaviour
     public void MoveToHead()
     {
         UnityEngine.Vector3 newPosition = head.position;
-        newPosition.y += BattleHUD.headOffsetY;
+        newPosition.y += UnitHUD.headOffsetY;
 
         transform.SetPositionAndRotation(newPosition, Quaternion.identity);
     }
