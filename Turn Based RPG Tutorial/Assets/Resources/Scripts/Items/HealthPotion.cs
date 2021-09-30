@@ -12,18 +12,10 @@ using UnityEngine;
 /// </summary>
 public class HealthPotion : Item
 {
+    public static readonly int baseHeal = 15;
 
-    public static readonly int baseHeal = 50;
-
-    public ItemType Type
-    {
-        get
-        {
-            return HealthPotion.type;
-        }
-    }
-
-    private static readonly ItemType type = ItemType.HealthPotion;
+    private bool unitHealBlocked;
+    private int deltaHP;
 
     /// <summary>
     /// Creates a new HealthPotion with
@@ -31,28 +23,49 @@ public class HealthPotion : Item
     /// </summary>
     public HealthPotion() : base() {}
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="playerUnit"></param>
-    /// <param name="enemyUnit"></param>
-    /// <returns>Returns true if the item was used,
-    /// false if there was no item left to use.</returns>
     public override bool Use(Unit playerUnit, Unit enemyUnit)
     {
-        if (quantity > 0)
+        if (quantity <= 0)
         {
-            playerUnit.Heal(baseHeal);
-            quantity--;
-            return true;
+            return false;
         }
 
-        return false;
+
+        int hpBefore = playerUnit.CurrentHP;
+
+        unitHealBlocked = !playerUnit.Heal(baseHeal);
+
+        int hpAfter = playerUnit.CurrentHP;
+
+
+        if (unitHealBlocked)
+        { 
+            return false;
+        }
+
+        deltaHP = hpAfter - hpBefore;
+        quantity--;
+        return true;
     }
 
 
+    public override String GetNonUseDialogue()
+    {
+        if (quantity <= 0)
+        {
+            return "You're out of that";
+        }
+
+        if (unitHealBlocked)
+        {
+            return "This unit doesn't need this at the moment";
+        }
+
+        return "You can't do that right now";
+    }
+
     public override string GetUseDialogue(Unit playerUnit, Unit enemyUnit)
     {
-        return playerUnit.unitName + " healed " + 50 + " health.";
+        return playerUnit.unitName + " healed " + deltaHP + " health";
     }
 }

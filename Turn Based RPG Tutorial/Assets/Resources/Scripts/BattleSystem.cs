@@ -54,6 +54,7 @@ public class BattleSystem : MonoBehaviour
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
+        //Add 2 health potions to inventory
         partyInventory.AddItem(ItemType.HealthPotion, 2);
 
         //Add units and huds
@@ -133,8 +134,9 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
+            String dialogue = item.GetNonUseDialogue();
             actionScreen.SetMode(ActionScreenMode.Dialogue);
-            actionScreen.SetDialogue("You're out of that.");
+            actionScreen.SetDialogue(dialogue);
             yield return new WaitForSeconds(2f);
             actionScreen.SetMode(ActionScreenMode.Items);
         }
@@ -164,11 +166,19 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Items);
     }
 
-    public void OnClickItem(ConsumableButton c)
+    /// <summary>
+    /// Method called when an Item
+    /// button is clicked.
+    /// </summary>
+    /// <param name="c"></param>
+    public void OnClickItem(ItemButton button)
     {
-        ItemType type = c.type;
+        ItemType type = button.type;
         Item item = partyInventory.GetItem(type);
-        StartCoroutine(UseItem(item));
+        if (item != null)
+        {
+            StartCoroutine(UseItem(item));
+        }
     }
 
     /**
@@ -185,7 +195,6 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.ENEMYTURN;
     }
     #endregion
-
 
     /**
      * Update UI for player's turn.
@@ -233,6 +242,42 @@ public class BattleSystem : MonoBehaviour
         else if (state == BattleState.LOST)
         {
             actionScreen.SetDialogue("You lost");
+        }
+    }
+
+    /// <summary>
+    /// Sets the battlestate and
+    /// updates the battle to fit the new battlestate.
+    /// </summary>
+    /// <param name="newState">The new battlestate.</param>
+    private void SetBattleState(BattleState newState)
+    {
+        //TODO: SetBattleState
+
+        switch (newState)
+        {
+            case BattleState.PLAYERTURN:
+            {
+
+                break;
+            }
+            case BattleState.ENEMYTURN:
+            {
+
+                break;
+            }
+            case BattleState.LOST:
+            {
+                break;
+            }
+            case BattleState.START:
+            {
+                break;
+            }
+            case BattleState.WON:
+            {
+                break;
+            }
         }
     }
 

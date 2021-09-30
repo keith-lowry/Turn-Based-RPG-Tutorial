@@ -5,7 +5,8 @@ using UnityEngine;
 
 /// <summary>
 /// Script representing an Inventory of
-/// usable Items.
+/// usable Items. Items are added to the Inventory
+/// and retrieved by ItemType.
 /// </summary>
 public class Inventory : MonoBehaviour
 {
@@ -54,13 +55,13 @@ public class Inventory : MonoBehaviour
         if (itemMap.ContainsKey(name))
         {
             Item i = itemMap[name];
-            i.quantity += amount;
+            i.AddQuantity(amount);
             return true;
         }
 
         Item newItem = ItemDatabase.GetItem(name);
         itemMap.Add(name, newItem);
-        newItem.quantity += (amount - 1); //Item has quantity of 1 by default
+        newItem.AddQuantity(amount - 1); //Item has quantity of 1 by default
         return true;
     }
 

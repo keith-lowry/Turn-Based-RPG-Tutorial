@@ -13,7 +13,7 @@ using UnityEngine;
 /// </summary>
 public abstract class Item
 {
-    public int quantity;
+    protected int quantity;
 
     /// <summary>
     /// Creates a new Item with a default quantity
@@ -25,7 +25,8 @@ public abstract class Item
     }
 
     /// <summary>
-    /// Activates the Item's effect. Decrements
+    /// Activates the Item's effect if it's quantity is
+    /// greater than 0. Decrements
     /// the consumable's quantity.
     /// </summary>
     /// <param name="playerUnit">The player.</param>
@@ -39,7 +40,34 @@ public abstract class Item
     /// when the Item is used.
     /// </summary>
     /// <returns>The Item's use dialogue.</returns>
-    public abstract String getUseDialogue(Unit playerUnit, Unit enemyUnit);
+    public abstract String GetUseDialogue(Unit playerUnit, Unit enemyUnit);
+
+
+    /// <summary>
+    /// Gets the String dialogue to be displayed
+    /// when the Item is not used.
+    /// </summary>
+    /// <returns>The Item's non-use dialogue.</returns>
+    public virtual String GetNonUseDialogue()
+    {
+        if (quantity <= 0)
+        {
+            return "You're out of that";
+        }
+
+        return "You can't do that right now";
+    }
+
+    /// <summary>
+    /// Increases the Item's quantity
+    /// by a certain amount.
+    /// </summary>
+    /// <param name="q">The amount to add
+    /// to the Item's quantity.</param>
+    public void AddQuantity(int q)
+    {
+        quantity += q;
+    }
 
 
 }

@@ -79,12 +79,20 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// Heals the player for
-    /// a certain amount.
+    /// Heals the Unit a certain amount
+    /// if they are not already at max
+    /// health.
     /// </summary>
-    /// <param name="heal"></param>
-    public void Heal(int heal)
+    /// <param name="heal">The amount to heal.</param>
+    /// <returns>True if the Unit was healed, false otherwise.</returns>
+    public bool Heal(int heal)
     {
+        //At full health already
+        if (currentHP == stats.vitality)
+        {
+            return false;
+        }
+
         currentHP += heal;
 
         if (currentHP > stats.vitality)
@@ -96,7 +104,9 @@ public class Unit : MonoBehaviour
         { 
             hud.SetHP(currentHP); //update hud
         }
-        
+
+        return true;
+
     }
 
     #region Utility Methods
