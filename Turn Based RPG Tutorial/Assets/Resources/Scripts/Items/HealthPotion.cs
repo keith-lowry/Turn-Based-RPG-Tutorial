@@ -5,7 +5,7 @@ using System.Transactions;
 using UnityEngine;
 
 /// <summary>
-/// Consumable representing a simple
+/// Singleton Item representing a simple
 /// health potion.
 /// 
 /// Not a MonoBehavior.
@@ -17,11 +17,31 @@ public class HealthPotion : Item
     private bool unitHealBlocked;
     private int deltaHP;
 
+    //Singleton Instance
+    private static HealthPotion _instance;
+
+    /// <summary>
+    /// Gets the instance of the
+    /// HealthPotion.
+    /// </summary>
+    public static HealthPotion Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new HealthPotion();
+            }
+
+            return _instance;
+        }
+    }
+
     /// <summary>
     /// Creates a new HealthPotion with
     /// a default quantity of 1.
     /// </summary>
-    public HealthPotion() : base() {}
+    private HealthPotion() : base() {}
 
     public override bool Use(Unit playerUnit, Unit enemyUnit)
     {

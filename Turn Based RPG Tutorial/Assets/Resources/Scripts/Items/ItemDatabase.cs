@@ -9,6 +9,10 @@ using UnityEngine;
 /// </summary>
 public static class ItemDatabase
 {
+    //TODO: be careful about this:
+    //using one new object
+    private static readonly Item[] items = new Item[] {HealthPotion.Instance};
+
     /// <summary>
     /// Get a new instance of the Item
     /// with the given type.
@@ -19,17 +23,7 @@ public static class ItemDatabase
     /// Item.</returns>
     public static Item GetItem(ItemType type)
     {
-        switch (type)
-        {
-            case ItemType.HealthPotion:
-            {
-                return new HealthPotion();
-            }
-
-            default:
-            {
-                return null;
-            }
-        }
+        int i = (int) type;
+        return items[i];
     }
 }

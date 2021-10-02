@@ -4,16 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Script representing an Inventory of
+/// Script representing a Singleton Inventory of
 /// usable Items. Items are added to the Inventory
 /// and retrieved by ItemType.
+///
+/// Not a Monobehavior.
 /// </summary>
-public class Inventory : MonoBehaviour
+public class Inventory
 {
     private Dictionary<ItemType, Item> itemMap; //current Items in inventory
 
+    private static Inventory _instance;
 
-    public void Awake()
+    public static Inventory Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new Inventory();
+            }
+
+            return _instance;
+        }
+    }
+
+    /// <summary>
+    /// Creates a new empty Inventory.
+    /// </summary>
+    private Inventory()
     {
         itemMap = new Dictionary<ItemType, Item>();
     }
@@ -73,5 +92,11 @@ public class Inventory : MonoBehaviour
     {
         AddItem(name, 1);
     }
+
+    //TODO: be careful about serializing
+    //make sure there's no possibility 
+    //of errors with adding object from itemDatabase
+    //serialize enum and quantity, then readd from
+    //itemDatabase?
 
 }

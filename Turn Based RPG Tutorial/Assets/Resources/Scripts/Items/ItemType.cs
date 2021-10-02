@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType
+/// <summary>
+/// Enum representing the types
+/// of usable Items in the game.
+/// </summary>
+public enum ItemType : int
 {
-    HealthPotion,
+    HealthPotion = 0,
+
 }

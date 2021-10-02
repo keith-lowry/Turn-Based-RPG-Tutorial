@@ -24,8 +24,6 @@ public class BattleSystem : MonoBehaviour
 
     public BattleStation playerStation; //location of player on battlefield
     public BattleStation enemyStation; //location of enemy on battlefield
-
-    public Inventory partyInventory;
     #endregion
 
     #region Canvases and UI
@@ -40,6 +38,7 @@ public class BattleSystem : MonoBehaviour
         " corners your party!", " ambushes you!"};
     private Unit playerUnit;
     private Unit enemyUnit;
+    private Inventory partyInventory;
     #endregion
 
     #region Set Up
@@ -47,8 +46,8 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = BattleState.START;
-        StartCoroutine(SetUpBattle());
+        partyInventory = Inventory.Instance;
+        SetBattleState(BattleState.START);
     }
 
     //Initialize Battle gameobjects and fields
@@ -85,8 +84,7 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(2f); //wait then start player turn
 
         //initiate player turn
-        state = BattleState.PLAYERTURN;
-        PlayerTurn();
+        SetBattleState(BattleState.PLAYERTURN);
     }
 
     #endregion
@@ -107,15 +105,12 @@ public class BattleSystem : MonoBehaviour
         if (isDead)
         {
             //End the battle
-            state = BattleState.WON;
-            EndBattle();
+            SetBattleState(BattleState.WON);
         }
         else
         {
             //Enemy turn
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
-
+            SetBattleState(BattleState.ENEMYTURN);
         }
     }
 
@@ -129,8 +124,7 @@ public class BattleSystem : MonoBehaviour
             actionScreen.SetMode(ActionScreenMode.Dialogue);
             actionScreen.SetDialogue(dialogue);
             yield return new WaitForSeconds(2f);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            SetBattleState(BattleState.ENEMYTURN);
         }
         else
         {
@@ -192,7 +186,6 @@ public class BattleSystem : MonoBehaviour
         }
 
         StartCoroutine(PlayerAttack());
-        state = BattleState.ENEMYTURN;
     }
     #endregion
 
@@ -223,13 +216,11 @@ public class BattleSystem : MonoBehaviour
 
         if (isDead)
         {
-            state = BattleState.LOST;
-            EndBattle();
+            SetBattleState(BattleState.LOST);
         }
         else
         {
-            state = BattleState.PLAYERTURN;
-            PlayerTurn();
+            SetBattleState(BattleState.PLAYERTURN);
         }
     }
 
@@ -247,7 +238,8 @@ public class BattleSystem : MonoBehaviour
 
     /// <summary>
     /// Sets the battlestate and
-    /// updates the battle to fit the new battlestate.
+    /// updates the battle to fit the
+    /// new state.
     /// </summary>
     /// <param name="newState">The new battlestate.</param>
     private void SetBattleState(BattleState newState)
@@ -258,24 +250,32 @@ public class BattleSystem : MonoBehaviour
         {
             case BattleState.PLAYERTURN:
             {
-
+                state = BattleState.PLAYERTURN;
+                PlayerTurn(); //start player turn
                 break;
             }
             case BattleState.ENEMYTURN:
             {
-
+                state = BattleState.ENEMYTURN;
+                StartCoroutine(EnemyTurn());
                 break;
             }
             case BattleState.LOST:
             {
+                state = BattleState.LOST;
+                EndBattle();
                 break;
             }
             case BattleState.START:
             {
+                state = BattleState.START;
+                StartCoroutine(SetUpBattle()); //set up battle
                 break;
             }
             case BattleState.WON:
             {
+                state = BattleState.WON;
+                EndBattle();
                 break;
             }
         }
