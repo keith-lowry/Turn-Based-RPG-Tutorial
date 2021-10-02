@@ -38,10 +38,9 @@ public class UnitTest
     [Test]
     public void TestUnitFields()
     {
-        Assert.AreEqual(unit.stats.vitality, 100);
-        Assert.AreEqual(unit.CurrentHP, unit.stats.vitality);
-        Assert.AreEqual(unit.stats.strength, 10);
-        Assert.AreEqual(unit.stats.strength, 10);
+        Assert.AreEqual(unit.Stats.MaxHealth, 200);
+        Assert.AreEqual(unit.CurrentHP, unit.Stats.MaxHealth);
+        Assert.AreEqual(unit.Stats.Attack, 30);
     }
 
     /**
@@ -50,11 +49,11 @@ public class UnitTest
      */
     [Test]
     public void TestUnitTakeDamage()
-    {
-        Assert.AreEqual(unit.CurrentHP, 100);
+    { 
+        Assert.AreEqual(unit.CurrentHP, 200);
 
         unit.TakeDamage(10); 
-        Assert.AreEqual(unit.CurrentHP, 90); //unit took 10 damage
+        Assert.AreEqual(unit.CurrentHP, 190); //unit took 10 damage
     }
 
     /**
@@ -65,10 +64,10 @@ public class UnitTest
     [Test]
     public void TestUnitDie()
     {
-        Assert.AreEqual(unit.CurrentHP, 100);
+        Assert.AreEqual(unit.CurrentHP, 200);
 
         Assert.IsFalse(unit.TakeDamage(10)); //unit does not die
-        Assert.IsTrue(unit.TakeDamage(100)); //unit dies
+        Assert.IsTrue(unit.TakeDamage(200)); //unit dies
         Assert.IsTrue(unit.CurrentHP <= 0);
     }
 

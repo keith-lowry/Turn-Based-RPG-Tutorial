@@ -97,7 +97,7 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Dialogue);
 
         // Damage the enemy
-        bool isDead = enemyUnit.TakeDamage(playerUnit.stats.strength);
+        bool isDead = enemyUnit.TakeDamage(playerUnit.Stats.Attack);
 
         actionScreen.SetDialogue("The attack is successful!");
 
@@ -217,7 +217,7 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        bool isDead = playerUnit.TakeDamage(enemyUnit.stats.strength);
+        bool isDead = playerUnit.TakeDamage(enemyUnit.Stats.Attack);
 
         yield return new WaitForSeconds(1f);
 

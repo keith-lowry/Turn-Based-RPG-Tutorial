@@ -30,7 +30,7 @@ public class UnitHUD : MonoBehaviour
         nameText.text = unit.unitName;
         levelText.text = "Lvl " + unit.unitLevel;
 
-        hpSlider.maxValue = unit.stats.vitality;
+        hpSlider.maxValue = unit.Stats.MaxHealth;
         hpSlider.value = unit.CurrentHP;
         head = unit.head;
 
