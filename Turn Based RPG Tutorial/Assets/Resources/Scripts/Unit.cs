@@ -53,10 +53,18 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private Stats stats;
+    /// <summary>
+    /// The type of Resource this Unit uses.
+    /// </summary>
+    public ResourceType ResourceType
+    {
+        get { return resourceType; }
+    }
 
     public Transform head;
 
+    private Stats stats;
+    private ResourceType resourceType;
     private int currentResource;
     private int currentHP;
 
@@ -67,10 +75,11 @@ public class Unit : MonoBehaviour
 
     public void Awake()
     {
-        stats = new Stats(Levelling.GetBaseStats(job, type));
+        stats = new Stats(Levelling.GetBaseStats(job));
 
         currentResource = stats.MaxResource;
         currentHP = stats.MaxHealth;
+        resourceType = SkillsDatabase.GetResourceType(job);
     }
 
     /**
@@ -131,7 +140,7 @@ public class Unit : MonoBehaviour
         if (newHud != null)
         {
             hud = newHud;
-            hud.PopulateHUD(this);
+            hud.SetUpHUD(this);
 
         }
     }
@@ -179,7 +188,7 @@ public class Unit : MonoBehaviour
         if (hud != null)
         {
             hud.SetHP(currentHP);
-            hud.SetLevel(unitLevel);
+            hud.SetJobAndLevel(job, unitLevel);
             hud.SetMaxHP(stats.MaxHealth);
         }
     }

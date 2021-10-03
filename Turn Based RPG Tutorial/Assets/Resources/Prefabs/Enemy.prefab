@@ -159,6 +159,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Enemy
   type: 1
-  job: 0
+  job: 6
   unitLevel: 1
   head: {fileID: 3610747009926849800}

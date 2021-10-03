@@ -15,29 +15,36 @@ public class UnitHUD : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public Slider hpSlider;
+    public Slider resourceSlider;
+    public Image resourceFill;
+
+    public Color furyColor;
+    public Color manaColor;
+    public Color staminaColor;
 
     private Transform head;
     private static readonly float headOffsetY = 0.10f;
-    private string unitName;
-    private int unitLevel;
 
 
     /// <summary>
     /// Updates all elements of the HUD
-    /// to match the given Unit's stats.
+    /// to match the given Unit's stats, and then
+    /// moves it to the Unit's head.
     /// </summary>
-    /// <param name="unit"></param>
-    public void PopulateHUD(Unit unit)
+    /// <param name="unit">The Unit this HUD
+    /// should display information about.</param>
+    public void SetUpHUD(Unit unit)
     {
-        unitLevel = unit.unitLevel;
-        unitName = unit.unitName;
+        SetJobAndLevel(unit.job, unit.unitLevel);
 
-        text.text = unit.unitName + " Lvl " + unit.unitLevel.ToString();
+        SetMaxHP(unit.Stats.MaxHealth);
+        SetHP(unit.CurrentHP);
 
-        hpSlider.maxValue = unit.Stats.MaxHealth;
-        hpSlider.value = unit.CurrentHP;
+        SetMaxResource(unit.Stats.MaxResource);
+        SetResource(unit.CurrentResource);
+        SetResourceType(unit.ResourceType);
+
         head = unit.head;
-
         MoveToHead();
     }
 
@@ -53,27 +60,65 @@ public class UnitHUD : MonoBehaviour
     /// <summary>
     /// Sets the HP slider max value.
     /// </summary>
-    /// <param name="maxHP">The unit's max HP.</param>
+    /// <param name="maxHP">The Unit's max HP.</param>
     public void SetMaxHP(int maxHP)
     {
         hpSlider.maxValue = maxHP;
     }
 
     /// <summary>
-    /// Sets the level text.
+    /// Sets the Job and Level text.
     /// </summary>
-    /// <param name="lvl">The unit's current level.</param>
-    public void SetLevel(int lvl)
+    /// <param name="name">The Unit's Job.</param>
+    /// <param name="lvl">The Unit's current level.</param>
+    public void SetJobAndLevel(Job job, int lvl)
     {
-        unitLevel = lvl;
-        text.text = unitName + " Lvl " + unitLevel.ToString();
+        text.text = job.ToString() + " Lvl " + lvl;
     }
 
     /// <summary>
-    /// Move the BattleHUD to the given unit's
-    /// location in worldspace.
+    /// Sets the Resource slider's current value.
     /// </summary>
-    /// <param name="unit"></param>
+    /// <param name="resource">Current Resource value.</param>
+    public void SetResource(int resource)
+    {
+        resourceSlider.value = resource;
+    }
+
+    /// <summary>
+    /// Sets the Resource slider's max value.
+    /// </summary>
+    /// <param name="maxResource">Max Resource value.</param>
+    public void SetMaxResource(int maxResource)
+    {
+        resourceSlider.maxValue = maxResource;
+    }
+
+    /// <summary>
+    /// Sets the Resource Bar's color based
+    /// on the ResourceType.
+    /// </summary>
+    /// <param name="type">The ResourceType.</param>
+    public void SetResourceType(ResourceType type)
+    {
+        switch (type)
+        {
+            case ResourceType.Fury:
+                resourceFill.color = furyColor;
+                break;
+            case ResourceType.Mana:
+                resourceFill.color = manaColor;
+                break;
+            case ResourceType.Stamina:
+                resourceFill.color = staminaColor;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Move the BattleHUD to its associated
+    /// Unit's head.
+    /// </summary>
     public void MoveToHead()
     {
         UnityEngine.Vector3 newPosition = head.position;
