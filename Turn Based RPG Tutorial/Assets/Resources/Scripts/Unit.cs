@@ -34,6 +34,15 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
+    /// The Unit's current amount
+    /// of Resource.
+    /// </summary>
+    public int CurrentResource
+    {
+        get { return currentResource; }
+    }
+
+    /// <summary>
     /// The Unit's current combat stats.
     /// </summary>
     public Stats Stats
@@ -48,9 +57,7 @@ public class Unit : MonoBehaviour
 
     public Transform head;
 
-    /// <summary>
-    /// The Unit's current HP.
-    /// </summary>
+    private int currentResource;
     private int currentHP;
 
     private UnitHUD hud;
@@ -62,7 +69,7 @@ public class Unit : MonoBehaviour
     {
         stats = new Stats(Levelling.GetBaseStats(job, type));
 
-
+        currentResource = stats.MaxResource;
         currentHP = stats.MaxHealth;
     }
 

@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
-using UnityEngine;
-
 /// <summary>
 /// Static class that knows what ItemTypes are
 /// associated with what Items.

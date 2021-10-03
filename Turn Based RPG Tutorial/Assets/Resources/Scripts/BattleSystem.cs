@@ -78,6 +78,7 @@ public class BattleSystem : MonoBehaviour
         enemyUnit.MoveToHomeStation();
 
         //Start Dialogue
+        actionScreen.gameObject.SetActive(true);
         actionScreen.SetMode(ActionScreenMode.Dialogue);
         actionScreen.SetDialogue(enemyUnit.unitName + GetStartDialogue());
 
@@ -244,8 +245,6 @@ public class BattleSystem : MonoBehaviour
     /// <param name="newState">The new battlestate.</param>
     private void SetBattleState(BattleState newState)
     {
-        //TODO: SetBattleState
-
         switch (newState)
         {
             case BattleState.PLAYERTURN:

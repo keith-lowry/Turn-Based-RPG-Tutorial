@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 
 /// <summary>

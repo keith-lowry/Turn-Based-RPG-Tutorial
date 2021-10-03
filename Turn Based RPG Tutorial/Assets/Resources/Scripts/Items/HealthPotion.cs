@@ -1,8 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Transactions;
-using UnityEngine;
 
 /// <summary>
 /// Singleton Item representing a simple
