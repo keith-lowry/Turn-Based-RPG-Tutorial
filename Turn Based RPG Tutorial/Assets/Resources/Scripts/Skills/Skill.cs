@@ -5,8 +5,30 @@ using UnityEngine;
 /// Skill that can be used by
 /// a certain level Job.
 /// </summary>
-public abstract class Skill
+public abstract class Skill : ITargetable
 {
+    /// <summary>
+    /// The UnitType target for this
+    /// Skill.
+    /// </summary>
+    public TargetType TargetType
+    {
+        get { return targetType; }
+    }
+
+    public string SkillName
+    {
+        get { return skillName; }
+    }
+
+    /// <summary>
+    /// The Number of Targets for this Skill.
+    /// </summary>
+    public NumberOfTargetsEnum NumberOfTargets
+    {
+        get { return numberOfTargets; }
+    }
+
     /// <summary>
     /// The Resource Cost of
     /// this skill.
@@ -26,15 +48,6 @@ public abstract class Skill
     }
 
     /// <summary>
-    /// The UnitType target for this
-    /// Skill.
-    /// </summary>
-    public UnitType UseTarget
-    {
-        get { return useTarget; }
-    }
-
-    /// <summary>
     /// The Job that can use this skill.
     /// </summary>
     public Job UseJob
@@ -42,19 +55,12 @@ public abstract class Skill
         get { return useJob; }
     }
 
-    /// <summary>
-    /// The Number of Targets for this Skill.
-    /// </summary>
-    public NumberOfTargetsEnum NumberOfTargets
-    {
-        get { return numberOfTargets; }
-    }
-
     private readonly int resourceCost;
     private readonly int useLevel;
     private readonly Job useJob;
-    private readonly UnitType useTarget;
+    private readonly TargetType targetType;
     private readonly NumberOfTargetsEnum numberOfTargets;
+    private readonly string skillName;
 
     /// <summary>
     /// Creates a new Skill.
@@ -62,13 +68,16 @@ public abstract class Skill
     /// <param name="cost">The ResourceCost of this Skill.</param>
     /// <param name="level">The Level required to use this SKill.</param>
     /// <param name="job">The Job required to use this Skill.</param>
-    /// <param name="target">The UnitType target of this Skill.</param>
-    public Skill(int cost, int level, Job job, UnitType target, NumberOfTargetsEnum numTargets)
+    /// <param name="targetType">The UnitType target of this Skill.</param>
+    /// <param name="numTargets">The number of targets for this Skill.</param>
+    /// <param name="name">The name of the Skill.</param>
+    public Skill(string name, int cost, int level, Job job, TargetType target, NumberOfTargetsEnum numTargets)
     {
+        skillName = name;
         resourceCost = cost;
         useLevel = level;
         useJob = job;
-        useTarget = target;
+        targetType = target;
         numberOfTargets = numTargets;
     }
 }

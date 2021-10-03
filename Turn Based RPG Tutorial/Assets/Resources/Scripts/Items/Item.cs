@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 
@@ -6,37 +7,53 @@ using Object = UnityEngine.Object;
 /// Abstract class representing an Item
 /// that can be used in battle.
 /// </summary>
-public abstract class Item
+public abstract class Item : ITargetable
 {
-    protected int quantity;
-
     /// <summary>
-    /// Creates a new Item with a default quantity
-    /// of 1.
+    /// The Type of Unit that can be targetted
+    /// by this Item.
     /// </summary>
-    public Item()
+    public TargetType TargetType
     {
-        quantity = 1;
+        get { return targetType; }
+    }
+
+    public string ItemName
+    {
+        get { return itemName; }
     }
 
     /// <summary>
-    /// Activates the Item's effect if it's quantity is
-    /// greater than 0. Decrements
-    /// the consumable's quantity.
+    /// The Number of Targets for this Item.
     /// </summary>
-    /// <param name="playerUnit">The player.</param>
-    /// <param name="enemyUnit">The enemy.</param>
-    /// <returns>True if the Item was used, false
-    /// otherwise.</returns>
-    public abstract bool Use(Unit playerUnit, Unit enemyUnit);
+    public NumberOfTargetsEnum NumberOfTargets
+    {
+        get { return numberOfTargets; }
+    }
+
+    protected int quantity;
+
+    private readonly TargetType targetType;
+    private readonly NumberOfTargetsEnum numberOfTargets;
+    private readonly string itemName;
 
     /// <summary>
-    /// Gets the String dialogue to be displayed
-    /// when the Item is used.
+    /// Creates a new Item with a default Quantity
+    /// of 1 and the given Target Type and
+    /// Number of Targets.
     /// </summary>
-    /// <returns>The Item's use dialogue.</returns>
-    public abstract String GetUseDialogue(Unit playerUnit, Unit enemyUnit);
-
+    /// <param name="target">The type of Unit to be targetted
+    /// by this Item.</param>
+    /// <param name="numTargets">The number of Targets this
+    /// Item needs.</param>
+    /// <param name="name">The name of this Item.</param>
+    public Item(string name, TargetType target, NumberOfTargetsEnum numTargets)
+    {
+        itemName = name;
+        targetType = target;
+        numberOfTargets = numTargets;
+        quantity = 1;
+    }
 
     /// <summary>
     /// Gets the String dialogue to be displayed
@@ -54,6 +71,12 @@ public abstract class Item
     }
 
     /// <summary>
+    /// Gets the Item's String dialogue to be
+    /// displayed when it is used.
+    /// </summary>
+    public abstract string GetUseDialogue();
+
+    /// <summary>
     /// Increases the Item's quantity
     /// by a certain amount.
     /// </summary>
@@ -63,6 +86,4 @@ public abstract class Item
     {
         quantity += q;
     }
-
-
 }

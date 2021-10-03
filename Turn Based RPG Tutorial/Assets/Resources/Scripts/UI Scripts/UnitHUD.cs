@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Transactions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Quaternion = UnityEngine.Quaternion;
@@ -12,12 +13,13 @@ using Quaternion = UnityEngine.Quaternion;
  */
 public class UnitHUD : MonoBehaviour
 {
-    public Text nameText;
-    public Text levelText;
+    public TextMeshProUGUI text;
     public Slider hpSlider;
 
     private Transform head;
     private static readonly float headOffsetY = 0.10f;
+    private string unitName;
+    private int unitLevel;
 
 
     /// <summary>
@@ -27,8 +29,10 @@ public class UnitHUD : MonoBehaviour
     /// <param name="unit"></param>
     public void PopulateHUD(Unit unit)
     {
-        nameText.text = unit.unitName;
-        levelText.text = "Lvl " + unit.unitLevel;
+        unitLevel = unit.unitLevel;
+        unitName = unit.unitName;
+
+        text.text = unit.unitName + " Lvl " + unit.unitLevel.ToString();
 
         hpSlider.maxValue = unit.Stats.MaxHealth;
         hpSlider.value = unit.CurrentHP;
@@ -61,7 +65,8 @@ public class UnitHUD : MonoBehaviour
     /// <param name="lvl">The unit's current level.</param>
     public void SetLevel(int lvl)
     {
-        levelText.text = "Lvl " + lvl;
+        unitLevel = lvl;
+        text.text = unitName + " Lvl " + unitLevel.ToString();
     }
 
     /// <summary>

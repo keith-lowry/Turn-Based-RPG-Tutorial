@@ -24,6 +24,8 @@ public class BattleSystem : MonoBehaviour
 
     public BattleStation playerStation; //location of player on battlefield
     public BattleStation enemyStation; //location of enemy on battlefield
+
+    public float dialogueDelay;
     #endregion
 
     #region Canvases and UI
@@ -82,7 +84,7 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Dialogue);
         actionScreen.SetDialogue(enemyUnit.unitName + GetStartDialogue());
 
-        yield return new WaitForSeconds(2f); //wait then start player turn
+        yield return new WaitForSeconds(dialogueDelay); //wait then start player turn
 
         //initiate player turn
         SetBattleState(BattleState.PLAYERTURN);
@@ -100,7 +102,7 @@ public class BattleSystem : MonoBehaviour
 
         actionScreen.SetDialogue("The attack is successful!");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(dialogueDelay);
 
         // Check if enemy is dead
         if (isDead)
@@ -115,25 +117,50 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    private IEnumerator UseItem(Item item)
+    /// <summary>
+    /// Uses the given Item on the given target.
+    /// </summary>
+    /// <param name="target">The UnitType of the target.</param>
+    /// <param name="item">The Item to be used.</param>
+    /// <returns></returns>
+    private IEnumerator UseItem(UnitType target, Item item)
     {
-        bool wasUsed = item.Use(playerUnit, enemyUnit);
+        switch (item.NumberOfTargets)
+        {
+            //MultiTargetItem
+            case NumberOfTargetsEnum.Multiple:
+                break;
 
-        if (wasUsed)
-        {
-            String dialogue = item.GetUseDialogue(playerUnit, enemyUnit);
-            actionScreen.SetMode(ActionScreenMode.Dialogue);
-            actionScreen.SetDialogue(dialogue);
-            yield return new WaitForSeconds(2f);
-            SetBattleState(BattleState.ENEMYTURN);
-        }
-        else
-        {
-            String dialogue = item.GetNonUseDialogue();
-            actionScreen.SetMode(ActionScreenMode.Dialogue);
-            actionScreen.SetDialogue(dialogue);
-            yield return new WaitForSeconds(2f);
-            actionScreen.SetMode(ActionScreenMode.Items);
+            //SingleTargetItem
+            case NumberOfTargetsEnum.Single:
+                Unit targetUnit = playerUnit;
+
+                if (target == UnitType.Enemy)
+                {
+                    targetUnit = enemyUnit;
+                }
+
+                SingleTargetItem i = (SingleTargetItem) item;
+                bool wasUsed = i.Use(targetUnit);
+
+                if (wasUsed)
+                {
+                    String dialogue = i.GetUseDialogue();
+                    actionScreen.SetMode(ActionScreenMode.Dialogue);
+                    actionScreen.SetDialogue(dialogue);
+                    yield return new WaitForSeconds(dialogueDelay);
+                    SetBattleState(BattleState.ENEMYTURN);
+                }
+                else
+                {
+                    String dialogue = i.GetNonUseDialogue();
+                    actionScreen.SetMode(ActionScreenMode.Dialogue);
+                    actionScreen.SetDialogue(dialogue);
+                    yield return new WaitForSeconds(dialogueDelay);
+                    actionScreen.SetMode(ActionScreenMode.Items);
+                }
+
+                break;
         }
     }
 
@@ -142,7 +169,7 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Dialogue);
         actionScreen.SetDialogue("I can't let you do that");
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(dialogueDelay);
 
         actionScreen.SetMode(ActionScreenMode.Actions);
 
@@ -172,7 +199,11 @@ public class BattleSystem : MonoBehaviour
         Item item = partyInventory.GetItem(type);
         if (item != null)
         {
-            StartCoroutine(UseItem(item));
+            UnitType userUnitType = UnitType.Player;
+            TargetType targetType = item.TargetType;
+            UnitType targetUnitType = DetermineTargetUnitType(userUnitType, 
+                targetType);
+            StartCoroutine(UseItem(targetUnitType, item));
         }
     }
 
@@ -294,6 +325,38 @@ public class BattleSystem : MonoBehaviour
         return battleStartDialogue[i];
     }
 
+    /// <summary>
+    /// Determines the UnitType of the Target
+    /// of an Item or Skill based on the
+    /// Item or Skill's user UnitType and the Item or Skill's
+    /// TargetType.
+    /// </summary>
+    /// <param name="userUnitType">The UnitType of the User.</param>
+    /// <param name="targetType">The TargetType of the Item/Skill.</param>
+    /// <returns>The UnitType of the target of this Item or Skill.</returns>
+    private UnitType DetermineTargetUnitType(UnitType userUnitType, TargetType targetType)
+    {
+        switch (userUnitType)
+        {
+            case UnitType.Player:
+                if (targetType == TargetType.Foe)
+                {
+                    return UnitType.Enemy;
+                }
+
+                return UnitType.Player;
+
+            case UnitType.Enemy:
+                if (targetType == TargetType.Foe)
+                {
+                    return UnitType.Player;
+                }
+
+                return UnitType.Enemy;
+        }
+
+        return userUnitType;
+    }
 
     #endregion
 

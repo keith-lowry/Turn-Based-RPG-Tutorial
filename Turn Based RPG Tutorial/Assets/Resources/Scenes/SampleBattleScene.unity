@@ -170,6 +170,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 7574299382451068738, guid: 08468d9bf9b0d334fb8414f8afc17feb, type: 3}
   playerStation: {fileID: 1710768051}
   enemyStation: {fileID: 2123672833}
+  dialogueDelay: 1
   actionScreen: {fileID: 1292612664}
   hudPrefab: {fileID: 5203357008758457621, guid: 32cf887dfc403214a9dd81f5887545e1, type: 3}
   hudCanvas: {fileID: 1594172253}

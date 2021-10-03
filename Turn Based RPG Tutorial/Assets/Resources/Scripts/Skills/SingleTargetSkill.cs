@@ -11,9 +11,10 @@ public abstract class SingleTargetSkill : Skill
     /// <param name="cost">The Resource Cost of this Skill.</param>
     /// <param name="level">The Level required to use this Skill.</param>
     /// <param name="job">The Job required to use this Skill.</param>
-    /// <param name="target">The UnitType target of this Skill.</param>
-    public SingleTargetSkill(int cost, int level, Job job, UnitType target) : 
-        base(cost, level, job, target, NumberOfTargetsEnum.Single) {}
+    /// <param name="targetType">The UnitType target of this Skill.</param>
+    /// <param name="name">The name of this Skill.</param>
+    public SingleTargetSkill(string name, int cost, int level, Job job, TargetType targetType) : 
+        base(name, cost, level, job, targetType, NumberOfTargetsEnum.Single) {}
 
     /// <summary>
     /// Activates the Skill's effect.
