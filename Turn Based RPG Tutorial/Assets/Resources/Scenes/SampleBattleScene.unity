@@ -734,7 +734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deltaHue: 0.001
-  deltaT: 0.01
+  deltaTime: 0.01
   startingColor: {r: 0.7725491, g: 0.29411766, b: 0.29411766, a: 0}
 --- !u!1 &1016105742
 GameObject:

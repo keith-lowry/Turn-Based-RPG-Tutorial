@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -11,28 +9,28 @@ using UnityEngine;
 /// </summary>
 public class RGBBackground : MonoBehaviour
 {
-    private UnityEngine.UI.Image image;
-    private float nextTime;
     public float deltaHue;
-    public float deltaT;
+    public float deltaTime;
     public Color startingColor;
 
+    private UnityEngine.UI.Image image;
+    private float nextTime;
+
+
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         image = GetComponent<UnityEngine.UI.Image>();
         image.color = startingColor;
         nextTime = 0f;
     }
 
-    void Update()
+    public void Update()
     {
         if (image != null && Time.time >= nextTime)
         {
-            Color color = image.color;
-
-            // Step 1: Calculate HSV for RGB
-            Color.RGBToHSV(color, out float H, out float S, out float V);
+            // Step 1: Calculate HSV
+            Color.RGBToHSV(image.color, out float H, out float S, out float V);
 
             // Step 2: Cycle through Hue
             if (H == 360)
@@ -45,11 +43,12 @@ public class RGBBackground : MonoBehaviour
             }
 
             // Step 3: Calculate RGB for new HSV
-            Color newColor = Color.HSVToRGB(H, S, V);
+            Color newColor = Color.HSVToRGB(H, S,
+                V);
 
-            // Step 4: Set new Color
+            // Step 4: Set Color
             image.color = newColor;
-            nextTime += deltaT;
+            nextTime += deltaTime;
         }
     }
 }
