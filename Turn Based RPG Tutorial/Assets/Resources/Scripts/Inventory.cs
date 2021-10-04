@@ -1,30 +1,48 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+/// <summary>
+/// Script representing a Singleton Inventory of
+/// usable Items. Items are added to the Inventory
+/// and retrieved by ItemType.
+///
+/// Not a Monobehavior.
+/// </summary>
+public class Inventory
 {
-    private Dictionary<ConsumableType, Consumable> itemMap; //party's current
-                                                            //items
+    private Dictionary<ItemType, Item> itemMap; //current Items in inventory
 
+    private static Inventory _instance;
 
-    public void Awake()
+    public static Inventory Instance
     {
-        itemMap = new Dictionary<ConsumableType, Consumable>();
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new Inventory();
+            }
 
-        //Add all possible items
-        SetUpMap();
+            return _instance;
+        }
     }
 
     /// <summary>
-    /// Gets a consumable from the party's
-    /// inventory.
+    /// Creates a new empty Inventory.
     /// </summary>
-    /// <param name="name">The name of the consumable.</param>
-    /// <returns>The associated consumable if it is in the
-    /// inventory. Null otherwise. </returns>
-    public Consumable GetItem(ConsumableType name)
+    private Inventory()
+    {
+        itemMap = new Dictionary<ItemType, Item>();
+    }
+
+    /// <summary>
+    /// Gets an Item from the
+    /// Inventory if it is in the Inventory.
+    /// </summary>
+    /// <param name="name">The type of the desired Item.</param>
+    /// <returns>The desired Item if it is in the
+    /// Inventory. Null otherwise. </returns>
+    public Item GetItem(ItemType name)
     {
         if (itemMap.ContainsKey(name))
         {
@@ -36,44 +54,47 @@ public class Inventory : MonoBehaviour
 
     /// <summary>
     /// Adds a certain amount of a specific
-    /// consumable to the party's inventory.
+    /// Item to the Inventory.
     /// </summary>
-    /// <param name="name">The name of the consumable. Must already
-    /// be in the item Map.</param>
-    /// <param name="amount">The amount to be added, must be greater
+    /// <param name="name">The type of the Item.</param>
+    /// <param name="amount">The amount to be added. Must be greater
     /// than 0.</param>
-    /// <returns>True if the consumable was added, false otherwise.</returns>
-    public bool AddItem(ConsumableType name, int amount)
+    /// <returns>True if the Consumable was added, false if Item was not added
+    /// because amount was invalid.</returns>
+    public bool AddItem(ItemType name, int amount)
     {
-        if (itemMap.ContainsKey(name) && amount > 0)
+        if (amount <= 0)
         {
-            Consumable c = itemMap[name];
-            c.quantity += amount;
+            return false;
+        }
+        
+
+        if (itemMap.ContainsKey(name))
+        {
+            Item i = itemMap[name];
+            i.AddQuantity(amount);
             return true;
         }
 
-        return false;
+        Item newItem = ItemDatabase.GetItem(name);
+        itemMap.Add(name, newItem);
+        newItem.AddQuantity(amount - 1); //Item has quantity of 1 by default
+        return true;
     }
 
     /// <summary>
-    /// Adds one of a specific consumable to the party's
-    /// inventory.
+    /// Adds one of a specific Item to the Inventory.
     /// </summary>
-    /// <param name="name">The name of the consumable. Must already
-    /// be in the item Map.</param>
-    /// <returns>True if the consumable was added, false otherwise.</returns>
-    public bool AddItem(ConsumableType name)
+    /// <param name="name">The type of the Item.</param>
+    public void AddItem(ItemType name)
     {
-        return (AddItem(name, 1));
+        AddItem(name, 1);
     }
 
-    /// <summary>
-    /// Adds all possible items to the
-    /// itemMap.
-    /// </summary>
-    private void SetUpMap()
-    {
-        HealthPotion hpPot = new HealthPotion();
-        itemMap.Add(hpPot.Type, hpPot);
-    }
+    //TODO: be careful about serializing
+    //make sure there's no possibility 
+    //of errors with adding object from itemDatabase
+    //serialize enum and quantity, then readd from
+    //itemDatabase?
+
 }

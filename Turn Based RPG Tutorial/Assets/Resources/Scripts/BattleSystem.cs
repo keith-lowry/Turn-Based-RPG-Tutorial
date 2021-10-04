@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 using Random = System.Random;
 
 /**
@@ -25,7 +26,7 @@ public class BattleSystem : MonoBehaviour
     public BattleStation playerStation; //location of player on battlefield
     public BattleStation enemyStation; //location of enemy on battlefield
 
-    public Inventory partyInventory;
+    public float dialogueDelay;
     #endregion
 
     #region Canvases and UI
@@ -40,6 +41,7 @@ public class BattleSystem : MonoBehaviour
         " corners your party!", " ambushes you!"};
     private Unit playerUnit;
     private Unit enemyUnit;
+    private Inventory partyInventory;
     #endregion
 
     #region Set Up
@@ -47,14 +49,15 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = BattleState.START;
-        StartCoroutine(SetUpBattle());
+        partyInventory = Inventory.Instance;
+        SetBattleState(BattleState.START);
     }
 
     //Initialize Battle gameobjects and fields
     private IEnumerator SetUpBattle()
     {
-        partyInventory.AddItem(ConsumableType.HealthPotion, 2);
+        //Add 2 health potions to inventory
+        partyInventory.AddItem(ItemType.HealthPotion, 2);
 
         //Add units and huds
         playerUnit = Instantiate(playerPrefab,
@@ -78,14 +81,14 @@ public class BattleSystem : MonoBehaviour
         enemyUnit.MoveToHomeStation();
 
         //Start Dialogue
+        actionScreen.gameObject.SetActive(true);
         actionScreen.SetMode(ActionScreenMode.Dialogue);
         actionScreen.SetDialogue(enemyUnit.unitName + GetStartDialogue());
 
-        yield return new WaitForSeconds(2f); //wait then start player turn
+        yield return new WaitForSeconds(dialogueDelay); //wait then start player turn
 
         //initiate player turn
-        state = BattleState.PLAYERTURN;
-        PlayerTurn();
+        SetBattleState(BattleState.PLAYERTURN);
     }
 
     #endregion
@@ -96,47 +99,69 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Dialogue);
 
         // Damage the enemy
-        bool isDead = enemyUnit.TakeDamage(playerUnit.stats.strength);
+        bool isDead = enemyUnit.TakeDamage(playerUnit.Stats.Attack);
 
         actionScreen.SetDialogue("The attack is successful!");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(dialogueDelay);
 
         // Check if enemy is dead
         if (isDead)
         {
             //End the battle
-            state = BattleState.WON;
-            EndBattle();
+            SetBattleState(BattleState.WON);
         }
         else
         {
             //Enemy turn
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
-
+            SetBattleState(BattleState.ENEMYTURN);
         }
     }
 
-    private IEnumerator UseItem(Consumable consumable)
+    /// <summary>
+    /// Uses the given Item on the given target.
+    /// </summary>
+    /// <param name="target">The UnitType of the target.</param>
+    /// <param name="item">The Item to be used.</param>
+    /// <returns></returns>
+    private IEnumerator UseItem(UnitType target, Item item)
     {
-        bool wasUsed = consumable.Use(playerUnit, enemyUnit);
+        switch (item.NumberOfTargets)
+        {
+            //MultiTargetItem
+            case NumberOfTargetsEnum.Multiple:
+                break;
 
-        if (wasUsed)
-        {
-            String dialogue = consumable.getUseDialogue(playerUnit, enemyUnit);
-            actionScreen.SetMode(ActionScreenMode.Dialogue);
-            actionScreen.SetDialogue(dialogue);
-            yield return new WaitForSeconds(2f);
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
-        }
-        else
-        {
-            actionScreen.SetMode(ActionScreenMode.Dialogue);
-            actionScreen.SetDialogue("You're out of that.");
-            yield return new WaitForSeconds(2f);
-            actionScreen.SetMode(ActionScreenMode.Items);
+            //SingleTargetItem
+            case NumberOfTargetsEnum.Single:
+                Unit targetUnit = playerUnit;
+
+                if (target == UnitType.Enemy)
+                {
+                    targetUnit = enemyUnit;
+                }
+
+                SingleTargetItem i = (SingleTargetItem) item;
+                bool wasUsed = i.Use(targetUnit);
+
+                if (wasUsed)
+                {
+                    String dialogue = i.GetUseDialogue();
+                    actionScreen.SetMode(ActionScreenMode.Dialogue);
+                    actionScreen.SetDialogue(dialogue);
+                    yield return new WaitForSeconds(dialogueDelay);
+                    SetBattleState(BattleState.ENEMYTURN);
+                }
+                else
+                {
+                    String dialogue = i.GetNonUseDialogue();
+                    actionScreen.SetMode(ActionScreenMode.Dialogue);
+                    actionScreen.SetDialogue(dialogue);
+                    yield return new WaitForSeconds(dialogueDelay);
+                    actionScreen.SetMode(ActionScreenMode.Items);
+                }
+
+                break;
         }
     }
 
@@ -145,7 +170,7 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Dialogue);
         actionScreen.SetDialogue("I can't let you do that");
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(dialogueDelay);
 
         actionScreen.SetMode(ActionScreenMode.Actions);
 
@@ -164,11 +189,23 @@ public class BattleSystem : MonoBehaviour
         actionScreen.SetMode(ActionScreenMode.Items);
     }
 
-    public void OnClickItem(ConsumableButton c)
+    /// <summary>
+    /// Method called when an Item
+    /// button is clicked.
+    /// </summary>
+    /// <param name="c"></param>
+    public void OnClickItem(ItemButton button)
     {
-        ConsumableType type = c.type;
-        Consumable consumable = partyInventory.GetItem(type);
-        StartCoroutine(UseItem(consumable));
+        ItemType type = button.type;
+        Item item = partyInventory.GetItem(type);
+        if (item != null)
+        {
+            UnitType userUnitType = UnitType.Player;
+            TargetType targetType = item.TargetType;
+            UnitType targetUnitType = DetermineTargetUnitType(userUnitType, 
+                targetType);
+            StartCoroutine(UseItem(targetUnitType, item));
+        }
     }
 
     /**
@@ -182,10 +219,8 @@ public class BattleSystem : MonoBehaviour
         }
 
         StartCoroutine(PlayerAttack());
-        state = BattleState.ENEMYTURN;
     }
     #endregion
-
 
     /**
      * Update UI for player's turn.
@@ -208,19 +243,17 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        bool isDead = playerUnit.TakeDamage(enemyUnit.stats.strength);
+        bool isDead = playerUnit.TakeDamage(enemyUnit.Stats.Attack);
 
         yield return new WaitForSeconds(1f);
 
         if (isDead)
         {
-            state = BattleState.LOST;
-            EndBattle();
+            SetBattleState(BattleState.LOST);
         }
         else
         {
-            state = BattleState.PLAYERTURN;
-            PlayerTurn();
+            SetBattleState(BattleState.PLAYERTURN);
         }
     }
 
@@ -232,7 +265,76 @@ public class BattleSystem : MonoBehaviour
         }
         else if (state == BattleState.LOST)
         {
-            actionScreen.SetDialogue("You lost");
+            actionScreen.SetDialogue("");
+            StartCoroutine(YouLost());
+        }
+    }
+
+    /// <summary>
+    /// Dramatic ending for the Level when the Player loses.
+    /// Reloads Level.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator YouLost()
+    {
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(1.5f);
+        actionScreen.SetDialogue("You");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You L");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You Lo");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You Los");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You Lost");
+        yield return new WaitForSecondsRealtime(0.7f);
+        playerUnit.Die();
+        yield return new WaitForSecondsRealtime(1f);
+        SceneManager.LoadScene(0);//reload level
+        Time.timeScale = 1f;
+    }
+
+    /// <summary>
+    /// Sets the battlestate and
+    /// updates the battle to fit the
+    /// new state.
+    /// </summary>
+    /// <param name="newState">The new battlestate.</param>
+    private void SetBattleState(BattleState newState)
+    {
+        switch (newState)
+        {
+            case BattleState.PLAYERTURN:
+            {
+                state = BattleState.PLAYERTURN;
+                PlayerTurn(); //start player turn
+                break;
+            }
+            case BattleState.ENEMYTURN:
+            {
+                state = BattleState.ENEMYTURN;
+                StartCoroutine(EnemyTurn());
+                break;
+            }
+            case BattleState.LOST:
+            {
+                state = BattleState.LOST;
+                EndBattle();
+                break;
+            }
+            case BattleState.START:
+            {
+                state = BattleState.START;
+                StartCoroutine(SetUpBattle()); //set up battle
+                break;
+            }
+            case BattleState.WON:
+            {
+                state = BattleState.WON;
+                EndBattle();
+                break;
+            }
         }
     }
 
@@ -250,6 +352,38 @@ public class BattleSystem : MonoBehaviour
         return battleStartDialogue[i];
     }
 
+    /// <summary>
+    /// Determines the UnitType of the Target
+    /// of an Item or Skill based on the
+    /// Item or Skill's user UnitType and the Item or Skill's
+    /// TargetType.
+    /// </summary>
+    /// <param name="userUnitType">The UnitType of the User.</param>
+    /// <param name="targetType">The TargetType of the Item/Skill.</param>
+    /// <returns>The UnitType of the target of this Item or Skill.</returns>
+    private UnitType DetermineTargetUnitType(UnitType userUnitType, TargetType targetType)
+    {
+        switch (userUnitType)
+        {
+            case UnitType.Player:
+                if (targetType == TargetType.Foe)
+                {
+                    return UnitType.Enemy;
+                }
+
+                return UnitType.Player;
+
+            case UnitType.Enemy:
+                if (targetType == TargetType.Foe)
+                {
+                    return UnitType.Player;
+                }
+
+                return UnitType.Enemy;
+        }
+
+        return userUnitType;
+    }
 
     #endregion
 

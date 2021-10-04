@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConsumableButton : MonoBehaviour
+public class ItemButton : MonoBehaviour
 {
-    public ConsumableType type;
+    public ItemType type;
 }

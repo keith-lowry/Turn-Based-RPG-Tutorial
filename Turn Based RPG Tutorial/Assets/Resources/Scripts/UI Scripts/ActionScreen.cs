@@ -88,7 +88,7 @@ public class ActionScreen : MonoBehaviour
     
     public void SetDialogue(String newDialogue)
     {
-        if (mode.Equals(ActionScreenMode.Dialogue))
+        if (mode.Equals(ActionScreenMode.Dialogue) && dialogue != null)
         {
             this.dialogue.text = newDialogue;
         }

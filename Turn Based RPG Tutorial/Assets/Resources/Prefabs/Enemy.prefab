@@ -158,24 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Enemy
+  type: 1
+  job: 6
   unitLevel: 1
-  job: 1
-  baseStats:
-    vitality: 100
-    resource: 10
-    intelligence: 10
-    strength: 10
-    magicResist: 10
-    armor: 10
-    speed: 10
-    critRate: 0
-  stats:
-    vitality: 0
-    resource: 0
-    intelligence: 0
-    strength: 0
-    magicResist: 0
-    armor: 0
-    speed: 0
-    critRate: 0
   head: {fileID: 3610747009926849800}

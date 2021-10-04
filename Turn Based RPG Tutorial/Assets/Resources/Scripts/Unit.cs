@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 /**
  * Script containing properties of
@@ -16,12 +17,13 @@ public class Unit : MonoBehaviour
      */
     public string unitName;
 
+    public UnitType type;
+    public Job job;
+
     /**
      * The Unit's current level.
      */
     public int unitLevel;
-
-    public Jobs.JobsEnum job;
 
     /// <summary>
     /// The Unit's current HP.
@@ -31,15 +33,39 @@ public class Unit : MonoBehaviour
         get { return currentHP;}
     }
 
-    public UnitStats baseStats;
+    /// <summary>
+    /// The Unit's current amount
+    /// of Resource.
+    /// </summary>
+    public int CurrentResource
+    {
+        get { return currentResource; }
+    }
 
-    public UnitStats stats;
+    /// <summary>
+    /// The Unit's current combat stats.
+    /// </summary>
+    public Stats Stats
+    {
+        get
+        {
+            return stats;
+        }
+    }
+
+    /// <summary>
+    /// The type of Resource this Unit uses.
+    /// </summary>
+    public ResourceType ResourceType
+    {
+        get { return resourceType; }
+    }
 
     public Transform head;
 
-    /// <summary>
-    /// The Unit's current HP.
-    /// </summary>
+    private Stats stats;
+    private ResourceType resourceType;
+    private int currentResource;
     private int currentHP;
 
     private UnitHUD hud;
@@ -49,13 +75,11 @@ public class Unit : MonoBehaviour
 
     public void Awake()
     {
-        stats = new UnitStats(baseStats.vitality, baseStats.resource,
-            baseStats.intelligence, baseStats.strength,
-            baseStats.magicResist, baseStats.armor, baseStats.speed,
-            baseStats.critRate);
+        stats = new Stats(Levelling.GetBaseStats(job));
 
-
-        currentHP = stats.vitality;
+        currentResource = stats.MaxResource;
+        currentHP = stats.MaxHealth;
+        resourceType = SkillsDatabase.GetResourceType(job);
     }
 
     /**
@@ -69,34 +93,47 @@ public class Unit : MonoBehaviour
         if ((currentHP - dmg) <= 0)
         {
             currentHP = 0;
-            hud.SetHP(currentHP); //update hud
+            UpdateHUD();
             return true;
         }
 
         currentHP -= dmg; 
-        hud.SetHP(currentHP); //update hud
+        UpdateHUD();
         return false;
     }
 
     /// <summary>
-    /// Heals the player for
-    /// a certain amount.
+    /// Heals the Unit a certain amount
+    /// if they are not already at max
+    /// health.
     /// </summary>
-    /// <param name="heal"></param>
-    public void Heal(int heal)
+    /// <param name="heal">The amount to heal.</param>
+    /// <returns>True if the Unit was healed, false otherwise.</returns>
+    public bool Heal(int heal)
     {
+        //At full health already
+        if (currentHP == stats.MaxHealth)
+        {
+            return false;
+        }
+
         currentHP += heal;
 
-        if (currentHP > stats.vitality)
+        if (currentHP > stats.MaxHealth)
         {
-            currentHP = stats.vitality;
+            currentHP = stats.MaxHealth;
         }
 
-        if (hud != null)
-        { 
-            hud.SetHP(currentHP); //update hud
-        }
-        
+        UpdateHUD();
+
+        return true;
+
+    }
+
+    public void Die()
+    {
+        Destroy(hud.gameObject);
+        Destroy(this.gameObject);
     }
 
     #region Utility Methods
@@ -109,7 +146,7 @@ public class Unit : MonoBehaviour
         if (newHud != null)
         {
             hud = newHud;
-            hud.PopulateHUD(this);
+            hud.SetUpHUD(this);
 
         }
     }
@@ -144,37 +181,34 @@ public class Unit : MonoBehaviour
         {
             transform.SetPositionAndRotation(station.transform.position,
                 Quaternion.identity);
+            UpdateHUDPosition();
+        }
+    }
+
+    /// <summary>
+    /// Updates the HUD to match the
+    /// Unit's current condition.
+    /// </summary>
+    private void UpdateHUD()
+    {
+        if (hud != null)
+        {
+            hud.SetHP(currentHP);
+            hud.SetJobAndLevel(job, unitLevel);
+            hud.SetMaxHP(stats.MaxHealth);
+        }
+    }
+
+    /// <summary>
+    /// Moves the HUD to the Unit's
+    /// head.
+    /// </summary>
+    private void UpdateHUDPosition()
+    {
+        if (hud != null)
+        {
             hud.MoveToHead();
         }
     }
     #endregion
-
-
-    /**
-     * Struct holding the Unit's stats.
-     */
-    [System.Serializable]
-    public class UnitStats
-    {
-        public int vitality;
-        public int resource;
-        public int intelligence;
-        public int strength;
-        public int magicResist;
-        public int armor;
-        public int speed;
-        public int critRate;
-
-        public UnitStats(int v, int r, int i, int s, int mr, int a, int sp, int cr)
-        {
-            vitality = v;
-            resource = r;
-            intelligence = i;
-            strength = s;
-            magicResist = mr;
-            armor = a;
-            speed = sp;
-            critRate = cr;
-        }
-    }
 }

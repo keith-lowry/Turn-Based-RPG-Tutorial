@@ -76,26 +76,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Player
+  type: 0
+  job: 1
   unitLevel: 1
-  job: 0
-  baseStats:
-    vitality: 100
-    resource: 10
-    intelligence: 10
-    strength: 10
-    magicResist: 10
-    armor: 10
-    speed: 10
-    critRate: 0
-  stats:
-    vitality: 0
-    resource: 0
-    intelligence: 0
-    strength: 0
-    magicResist: 0
-    armor: 0
-    speed: 0
-    critRate: 0
+  resourceType: 1
   head: {fileID: 2796656014991139558}
 --- !u!1 &7210957953329932153
 GameObject:
