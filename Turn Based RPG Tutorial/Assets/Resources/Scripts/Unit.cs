@@ -130,6 +130,12 @@ public class Unit : MonoBehaviour
 
     }
 
+    public void Die()
+    {
+        Destroy(hud.gameObject);
+        Destroy(this.gameObject);
+    }
+
     #region Utility Methods
     /// <summary>
     /// Sets the Unit's HUD.

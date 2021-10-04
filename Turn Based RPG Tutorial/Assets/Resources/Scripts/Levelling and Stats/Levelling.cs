@@ -24,7 +24,7 @@ public static class Levelling
     private static readonly int[] marksmanBaseStats = new int[] { 200, 50, 30, 0, 10, 15, 10, 0 };
 
     private static readonly int[] banditBaseStats = new int[] {80, 50, 10, 0, 5, 5, 5, 0}; //Enemy Jobs
-    private static readonly int[] crookBaseStats = new int[] { 80, 50, 10, 0, 5, 5, 5, 0 };
+    private static readonly int[] crookBaseStats = new int[] { 80, 50, 10, 0, 5, 5, 5, 0 }; //TODO: attack should be 10
     private static readonly int[] pirateBaseStats = new int[] { 80, 50, 10, 0, 5, 5, 5, 0 };
 
     //Stat Growth Rates by Job

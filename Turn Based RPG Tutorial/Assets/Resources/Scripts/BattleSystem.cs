@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 using Random = System.Random;
 
 /**
@@ -264,8 +265,34 @@ public class BattleSystem : MonoBehaviour
         }
         else if (state == BattleState.LOST)
         {
-            actionScreen.SetDialogue("You lost");
+            actionScreen.SetDialogue("");
+            StartCoroutine(YouLost());
         }
+    }
+
+    /// <summary>
+    /// Dramatic ending for the Level when the Player loses.
+    /// Reloads Level.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator YouLost()
+    {
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(1.5f);
+        actionScreen.SetDialogue("You");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You L");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You Lo");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You Los");
+        yield return new WaitForSecondsRealtime(0.7f);
+        actionScreen.SetDialogue("You Lost");
+        yield return new WaitForSecondsRealtime(0.7f);
+        playerUnit.Die();
+        yield return new WaitForSecondsRealtime(1f);
+        SceneManager.LoadScene(0);//reload level
+        Time.timeScale = 1f;
     }
 
     /// <summary>
