@@ -8,6 +8,13 @@ using UnityEngine;
 /// </summary>
 public static class SkillsDatabase
 {
+    private static Skill[] berserkerSkills = new Skill[] { };
+    private static Skill[] assassinSkills = new Skill[] {DaggerToss.Instance};
+    private static SortedSet<Skill> mageSkills = new SortedSet<Skill>();
+
+
+    private static Dictionary<Job, Skill[]> skillsMap = new Dictionary<Job, Skill[]>() {{Job.Berserker, berserkerSkills}, {Job.Assassin, assassinSkills}};
+
     /// <summary>
     /// Gets the Resource type that the given Job uses.
     /// </summary>
