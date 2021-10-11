@@ -16,17 +16,20 @@ public abstract class Skill : ITargetable
         get { return targetType; }
     }
 
-    public string SkillName
-    {
-        get { return skillName; }
-    }
-
     /// <summary>
     /// The Number of Targets for this Skill.
     /// </summary>
-    public NumberOfTargetsEnum NumberOfTargets
+    public TargetCount TargetCount
     {
         get { return numberOfTargets; }
+    }
+
+    /// <summary>
+    /// This Skill's name.
+    /// </summary>
+    public string SkillName
+    {
+        get { return skillName; }
     }
 
     /// <summary>
@@ -55,12 +58,12 @@ public abstract class Skill : ITargetable
         get { return useJob; }
     }
 
+    private readonly TargetType targetType;
+    private readonly TargetCount numberOfTargets;
+    private readonly string skillName;
     private readonly int resourceCost;
     private readonly int useLevel;
     private readonly Job useJob;
-    private readonly TargetType targetType;
-    private readonly NumberOfTargetsEnum numberOfTargets;
-    private readonly string skillName;
 
     /// <summary>
     /// Creates a new Skill.
@@ -71,7 +74,7 @@ public abstract class Skill : ITargetable
     /// <param name="targetType">The UnitType target of this Skill.</param>
     /// <param name="numTargets">The number of targets for this Skill.</param>
     /// <param name="name">The name of the Skill.</param>
-    public Skill(string name, int cost, int level, Job job, TargetType target, NumberOfTargetsEnum numTargets)
+    public Skill(string name, int cost, int level, Job job, TargetType target, TargetCount numTargets)
     {
         skillName = name;
         resourceCost = cost;

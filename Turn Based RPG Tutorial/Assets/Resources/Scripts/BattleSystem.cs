@@ -126,14 +126,14 @@ public class BattleSystem : MonoBehaviour
     /// <returns></returns>
     private IEnumerator UseItem(UnitType target, Item item)
     {
-        switch (item.NumberOfTargets)
+        switch (item.TargetCount)
         {
             //MultiTargetItem
-            case NumberOfTargetsEnum.Multiple:
+            case TargetCount.Multiple:
                 break;
 
             //SingleTargetItem
-            case NumberOfTargetsEnum.Single:
+            case TargetCount.Single:
                 Unit targetUnit = playerUnit;
 
                 if (target == UnitType.Enemy)

@@ -16,7 +16,7 @@ public abstract class SingleTargetItem : Item
     /// </summary>
     /// <param name="target">The type of Target for this Item.</param>
     public SingleTargetItem(string name, TargetType target) : base(name, target,
-        NumberOfTargetsEnum.Single) {}
+        TargetCount.Single) {}
 
     /// <summary>
     /// Activates the Item's effect on the given

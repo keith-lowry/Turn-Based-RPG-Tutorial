@@ -18,23 +18,29 @@ public abstract class Item : ITargetable
         get { return targetType; }
     }
 
+    /// <summary>
+    /// The Number of Targets for this Item.
+    /// </summary>
+    public TargetCount TargetCount
+    {
+        get { return targetCount; }
+    }
+
+    /// <summary>
+    /// The name of this Item.
+    /// </summary>
     public string ItemName
     {
         get { return itemName; }
     }
 
     /// <summary>
-    /// The Number of Targets for this Item.
+    /// The quantity of this Item.
     /// </summary>
-    public NumberOfTargetsEnum NumberOfTargets
-    {
-        get { return numberOfTargets; }
-    }
-
     protected int quantity;
 
     private readonly TargetType targetType;
-    private readonly NumberOfTargetsEnum numberOfTargets;
+    private readonly TargetCount targetCount;
     private readonly string itemName;
 
     /// <summary>
@@ -47,11 +53,11 @@ public abstract class Item : ITargetable
     /// <param name="numTargets">The number of Targets this
     /// Item needs.</param>
     /// <param name="name">The name of this Item.</param>
-    public Item(string name, TargetType target, NumberOfTargetsEnum numTargets)
+    public Item(string name, TargetType target, TargetCount numTargets)
     {
         itemName = name;
         targetType = target;
-        numberOfTargets = numTargets;
+        targetCount = numTargets;
         quantity = 1;
     }
 
@@ -60,7 +66,7 @@ public abstract class Item : ITargetable
     /// when the Item is not used.
     /// </summary>
     /// <returns>The Item's non-use dialogue.</returns>
-    public virtual String GetNonUseDialogue()
+    public virtual string GetNonUseDialogue()
     {
         if (quantity <= 0)
         {

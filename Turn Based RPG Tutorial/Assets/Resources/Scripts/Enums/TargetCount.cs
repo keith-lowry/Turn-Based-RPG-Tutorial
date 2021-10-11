@@ -6,7 +6,7 @@ using UnityEngine;
 /// Enum that represents how many
 /// Targets something can have.
 /// </summary>
-public enum NumberOfTargetsEnum
+public enum TargetCount
 {
     Single, Multiple
 }

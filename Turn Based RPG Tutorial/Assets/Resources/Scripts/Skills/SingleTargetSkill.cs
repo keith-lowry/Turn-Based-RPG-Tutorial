@@ -14,7 +14,7 @@ public abstract class SingleTargetSkill : Skill
     /// <param name="targetType">The UnitType target of this Skill.</param>
     /// <param name="name">The name of this Skill.</param>
     public SingleTargetSkill(string name, int cost, int level, Job job, TargetType targetType) : 
-        base(name, cost, level, job, targetType, NumberOfTargetsEnum.Single) {}
+        base(name, cost, level, job, targetType, TargetCount.Single) {}
 
     /// <summary>
     /// Activates the Skill's effect.

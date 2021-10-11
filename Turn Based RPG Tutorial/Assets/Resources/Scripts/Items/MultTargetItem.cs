@@ -16,7 +16,7 @@ public abstract class MultTargetItem : Item
     /// <param name="target">The type of Unit to be Targetted by
     /// this MultiTargetItem.</param>
     public MultTargetItem(string name, TargetType target) : base(name, target, 
-        NumberOfTargetsEnum.Multiple) {}
+        TargetCount.Multiple) {}
 
     /// <summary>
     /// Activates the Item's effect on the given array

@@ -13,7 +13,7 @@ public abstract class MultiTargetSkill : Skill
     /// <param name="targetType">The UnitType target of this Skill.</param>
     /// <param name="name">The name of this Skill.</param>
     public MultiTargetSkill(string name, int cost, int level, Job job, TargetType targetType) : 
-        base(name, cost, level, job, targetType, NumberOfTargetsEnum.Multiple) {}
+        base(name, cost, level, job, targetType, TargetCount.Multiple) {}
 
     /// <summary>
     /// Activates the Skill's effect.

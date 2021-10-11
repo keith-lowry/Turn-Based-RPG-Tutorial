@@ -21,7 +21,7 @@ public interface ITargetable
     /// <summary>
     /// The number of Targets.
     /// </summary>
-    public NumberOfTargetsEnum NumberOfTargets
+    public TargetCount TargetCount
     {
         get;
     }
