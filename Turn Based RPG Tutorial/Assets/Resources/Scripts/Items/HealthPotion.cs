@@ -10,9 +10,6 @@ public class HealthPotion : SingleTargetItem
 {
     public static readonly int baseHeal = 30;
 
-    //Singleton Instance
-    private static HealthPotion _instance;
-
     /// <summary>
     /// Gets the instance of the
     /// HealthPotion.
@@ -30,8 +27,11 @@ public class HealthPotion : SingleTargetItem
         }
     }
 
+    //Singleton Instance
+    private static HealthPotion _instance;
+
     private string useDialogue;
-    private string nonUseDialogue;
+    private string nonUseDialogue; //TODO: rename to FailedUseDialogue
 
     /// <summary>
     /// Creates a new HealthPotion with
