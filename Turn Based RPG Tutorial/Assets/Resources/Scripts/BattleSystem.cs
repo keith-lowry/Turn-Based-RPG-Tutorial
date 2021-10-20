@@ -154,7 +154,7 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    String dialogue = i.GetNonUseDialogue();
+                    String dialogue = i.GetFailedUseDialogue();
                     actionScreen.SetMode(ActionScreenMode.Dialogue);
                     actionScreen.SetDialogue(dialogue);
                     yield return new WaitForSeconds(dialogueDelay);

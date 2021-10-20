@@ -66,7 +66,7 @@ public abstract class Item : ITargetable
     /// when the Item is not used.
     /// </summary>
     /// <returns>The Item's non-use dialogue.</returns>
-    public virtual string GetNonUseDialogue()
+    public virtual string GetFailedUseDialogue()
     {
         if (quantity <= 0)
         {

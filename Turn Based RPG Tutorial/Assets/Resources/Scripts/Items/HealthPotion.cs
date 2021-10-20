@@ -31,7 +31,7 @@ public class HealthPotion : SingleTargetItem
     private static HealthPotion _instance;
 
     private string useDialogue;
-    private string nonUseDialogue; //TODO: rename to FailedUseDialogue
+    private string failedUseDialogue; //TODO: rename to FailedUseDialogue
 
     /// <summary>
     /// Creates a new HealthPotion with
@@ -40,14 +40,14 @@ public class HealthPotion : SingleTargetItem
     private HealthPotion() : base("Health Potion", TargetType.Friendly)
     {
         useDialogue = "";
-        nonUseDialogue = "";
+        failedUseDialogue = "";
     }
 
     public override bool Use(Unit targetUnit)
     {
         if (quantity <= 0)
         {
-            SetNonUseDialogue(false);
+            SetFailedUseDialogue(false);
             return false;
         }
 
@@ -61,7 +61,7 @@ public class HealthPotion : SingleTargetItem
 
         if (healBlocked)
         { 
-            SetNonUseDialogue(true);
+            SetFailedUseDialogue(true);
             return false;
         }
 
@@ -72,9 +72,9 @@ public class HealthPotion : SingleTargetItem
     }
 
 
-    public override String GetNonUseDialogue()
+    public override String GetFailedUseDialogue()
     {
-        return nonUseDialogue;
+        return failedUseDialogue;
     }
 
     public override string GetUseDialogue()
@@ -87,19 +87,19 @@ public class HealthPotion : SingleTargetItem
     /// </summary>
     /// <param name="healBlocked">Was the heal blocked because
     /// the target Unit was at full HP?</param>
-    private void SetNonUseDialogue(bool healBlocked)
+    private void SetFailedUseDialogue(bool healBlocked)
     {
         if (healBlocked)
         {
-            nonUseDialogue = "This Unit is already at full HP";
+            failedUseDialogue = "This Unit is already at full HP";
         }
         else if (quantity <= 0)
         {
-            nonUseDialogue = "You're out of that";
+            failedUseDialogue = "You're out of that";
         }
         else
         {
-            nonUseDialogue = "You can't do that right now";
+            failedUseDialogue = "You can't do that right now";
         }
     }
 
