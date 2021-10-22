@@ -9,7 +9,7 @@ using UnityEngine;
 public static class SkillsDatabase
 {
     private static Skill[] berserkerSkills = new Skill[] { };
-    private static Skill[] assassinSkills = new Skill[] {DaggerToss.Instance};
+    private static Skill[] assassinSkills = new Skill[] {};
     private static SortedSet<Skill> mageSkills = new SortedSet<Skill>();
 
 

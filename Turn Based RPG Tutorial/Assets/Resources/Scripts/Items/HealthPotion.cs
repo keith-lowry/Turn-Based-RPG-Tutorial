@@ -31,7 +31,7 @@ public class HealthPotion : SingleTargetItem
     private static HealthPotion _instance;
 
     private string useDialogue;
-    private string failedUseDialogue; //TODO: rename to FailedUseDialogue
+    private string failedUseDialogue;
 
     /// <summary>
     /// Creates a new HealthPotion with

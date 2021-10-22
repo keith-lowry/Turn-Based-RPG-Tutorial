@@ -5,7 +5,7 @@ using UnityEngine;
 /// Skill that can be used by
 /// a certain level Job.
 /// </summary>
-public abstract class Skill : ITargetable
+public abstract class Skill : MonoBehaviour, ITargetable
 {
     /// <summary>
     /// The UnitType target for this
