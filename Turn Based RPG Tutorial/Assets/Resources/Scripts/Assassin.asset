@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Assassin
   m_EditorClassIdentifier: 
   title: 
+  skills: []
