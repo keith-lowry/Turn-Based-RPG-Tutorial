@@ -12,5 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e93f1866c721d84b96b4abb4212df40, type: 3}
   m_Name: Assassin
   m_EditorClassIdentifier: 
-  title: 
-  skills: []
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  title: Assassin
+  skills:
+  - {fileID: 0}

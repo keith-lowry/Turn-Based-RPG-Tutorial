@@ -130,6 +130,7 @@ MonoBehaviour:
   unitName: Assassin
   type: 0
   job: 1
+  proff: {fileID: 11400000, guid: c5e9aa6d3b1202b4abb3188dd6c604c4, type: 2}
   unitLevel: 1
   head: {fileID: 6025156138089649685}
 --- !u!1 &6068157500051443131
