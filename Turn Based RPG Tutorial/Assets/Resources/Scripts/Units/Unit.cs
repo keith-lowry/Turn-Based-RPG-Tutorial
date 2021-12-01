@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour
 
     public UnitType type;
     public Job job;
-    public Profession proff;
+    public Class proff;
 
     /**
      * The Unit's current level.
