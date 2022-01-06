@@ -5,8 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Container for a Profession's title, skills, base stats,
+/// Container for a Class's title, skills, base stats,
 /// and stat growth rates.
+///
+/// A Class is a trait of Units that determines their stats
+/// and abilities for combat.
 /// </summary>
 [CreateAssetMenu(fileName = "New Class", menuName = "Class")]
 public class Class : ScriptableObject
@@ -31,10 +34,10 @@ public class Class : ScriptableObject
         get => growthRatesRaw;
     }
 
-    [SerializeField] private string title;
-    [SerializeField] private List<Skill> skills;
-    [SerializeField] private StatsRaw baseStatsRaw;
-    [SerializeField] private StatsRaw growthRatesRaw;
+    [SerializeField] private string title; //Class Title
+    [SerializeField] private List<Skill> skills; //All Possible Skills
+    [SerializeField] private StatsRaw baseStatsRaw; //Level 1 Base Stats
+    [SerializeField] private StatsRaw growthRatesRaw; //Levelling Growth Rates
 
     /// <summary>
     /// Container for starting Stats and
