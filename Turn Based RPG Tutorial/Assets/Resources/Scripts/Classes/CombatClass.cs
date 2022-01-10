@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Container for a Class's title, skills, base stats,
+/// Container for a CombatClass's title, skills, base stats,
 /// and stat growth rates.
 ///
-/// A Class is a trait of Units that determines their stats
+/// A CombatClass is a trait of Units that determines their stats
 /// and abilities for combat.
 /// </summary>
 [CreateAssetMenu(fileName = "New Class", menuName = "Class")]
-public class Class : ScriptableObject
+public class CombatClass : ScriptableObject
 {
     public string Title
     {

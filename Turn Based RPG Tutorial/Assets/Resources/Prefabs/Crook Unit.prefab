@@ -46,10 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Crook
-  type: 1
   job: 7
   unitLevel: 1
   head: {fileID: 7331150801883200088}
+  resourceType: 1
+  allegiance: 0
+  isAI: 1
+  combatClass: {fileID: 0}
 --- !u!1 &3807745054931476040
 GameObject:
   m_ObjectHideFlags: 0

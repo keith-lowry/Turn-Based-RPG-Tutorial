@@ -124,7 +124,7 @@ public class BattleSystem : MonoBehaviour
     /// <param name="target">The UnitType of the target.</param>
     /// <param name="item">The Item to be used.</param>
     /// <returns></returns>
-    private IEnumerator UseItem(UnitType target, Item item)
+    private IEnumerator UseItem(UnitAllegiance target, Item item)
     {
         switch (item.TargetCount)
         {
@@ -136,7 +136,7 @@ public class BattleSystem : MonoBehaviour
             case TargetCount.Single:
                 Unit targetUnit = playerUnit;
 
-                if (target == UnitType.Enemy)
+                if (target == UnitAllegiance.Enemy)
                 {
                     targetUnit = enemyUnit;
                 }
@@ -200,11 +200,11 @@ public class BattleSystem : MonoBehaviour
         Item item = partyInventory.GetItem(type);
         if (item != null)
         {
-            UnitType userUnitType = UnitType.Player;
+            UnitAllegiance userUnitAllegiance = UnitAllegiance.Player;
             TargetType targetType = item.TargetType;
-            UnitType targetUnitType = DetermineTargetUnitType(userUnitType, 
+            UnitAllegiance targetUnitAllegiance = DetermineTargetUnitType(userUnitAllegiance, 
                 targetType);
-            StartCoroutine(UseItem(targetUnitType, item));
+            StartCoroutine(UseItem(targetUnitAllegiance, item));
         }
     }
 
@@ -358,31 +358,31 @@ public class BattleSystem : MonoBehaviour
     /// Item or Skill's user UnitType and the Item or Skill's
     /// TargetType.
     /// </summary>
-    /// <param name="userUnitType">The UnitType of the User.</param>
+    /// <param name="userUnitAllegiance">The UnitType of the User.</param>
     /// <param name="targetType">The TargetType of the Item/Skill.</param>
     /// <returns>The UnitType of the target of this Item or Skill.</returns>
-    private UnitType DetermineTargetUnitType(UnitType userUnitType, TargetType targetType)
+    private UnitAllegiance DetermineTargetUnitType(UnitAllegiance userUnitAllegiance, TargetType targetType)
     {
-        switch (userUnitType)
+        switch (userUnitAllegiance)
         {
-            case UnitType.Player:
+            case UnitAllegiance.Player:
                 if (targetType == TargetType.Foe)
                 {
-                    return UnitType.Enemy;
+                    return UnitAllegiance.Enemy;
                 }
 
-                return UnitType.Player;
+                return UnitAllegiance.Player;
 
-            case UnitType.Enemy:
+            case UnitAllegiance.Enemy:
                 if (targetType == TargetType.Foe)
                 {
-                    return UnitType.Player;
+                    return UnitAllegiance.Player;
                 }
 
-                return UnitType.Enemy;
+                return UnitAllegiance.Enemy;
         }
 
-        return userUnitType;
+        return userUnitAllegiance;
     }
 
     #endregion

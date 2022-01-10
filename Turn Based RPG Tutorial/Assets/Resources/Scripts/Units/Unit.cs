@@ -15,11 +15,26 @@ public class Unit : MonoBehaviour
     /**
      * The Unit's name.
      */
-    public string unitName;
+    public string unitName; //TODO: remove?
+    
+    /// <summary>
+    /// The Unit's side in battle.
+    /// </summary>
+    public UnitAllegiance Allegiance
+    {
+        get => allegiance;
+    }
 
-    public UnitType type;
-    public Job job;
-    public Class proff;
+    public Job job; //TODO: remove Job, make canvas take title from combatclass
+
+    /// <summary>
+    /// The Unit's set of skills and stats for
+    /// combat.
+    /// </summary>
+    public CombatClass CombatClass
+    {
+        get => combatClass;
+    }
 
     /**
      * The Unit's current level.
@@ -62,17 +77,24 @@ public class Unit : MonoBehaviour
         get { return resourceType; }
     }
 
+    /// <summary>
+    /// Is this Unit controlled by AI?
+    /// </summary>
+    public bool IsAI
+    {
+        get => isAI;
+    }
+
     public Transform head;
-
-    private Stats stats;
-    private ResourceType resourceType;
-    private int currentResource;
-    private int currentHP;
-
+    [SerializeField] private CombatClass combatClass;
+    private Stats stats; //TODO: remove, part of combat class
+    [SerializeField] private ResourceType resourceType; //TODO: remove, part of combatclass
+    [SerializeField] private UnitAllegiance allegiance; 
+    private int currentResource; //TODO: remove, part of combatclass
+    private int currentHP; //TODO: remove?
     private UnitHUD hud;
-
     private BattleStation homeStation;
-
+    [SerializeField] private bool isAI;
 
     public void Awake()
     {
